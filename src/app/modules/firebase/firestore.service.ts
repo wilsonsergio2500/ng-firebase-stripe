@@ -76,6 +76,7 @@ export abstract class FirestoreService<T> {
       }
     })
   }
+  
 
   subCollection$<TTypeOfSubCollection = T>(doc: string, collection: string, queryFn?: QueryFn) {
     return this.collection.doc(doc).collection<TTypeOfSubCollection>(collection, queryFn).valueChanges().pipe(
@@ -87,6 +88,10 @@ export abstract class FirestoreService<T> {
         }
       })
     );
+  }
+
+  subDocRef(path: string[]) {
+    return this.collection.doc(path.length > 1 ? path.join('/') : path[0])
   }
 
   queryCollection(queryFn?: QueryFn) {

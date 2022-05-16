@@ -188,9 +188,10 @@ export class StripeCustomersState {
 
   @Action(StripeCustomersRemovePaymentMethod)
   onRemovePaymentMethod(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersRemovePaymentMethod) {
+    const { current } = ctx.getState();
     const { id } = action;
     return this.confirmationDialog.OnConfirm('Are you sure you would like to remove this payment method?').pipe(
-      mergeMap(() => this.schemas.delete(id)),
+      mergeMap(() => this.schemas.subDocRef([current.id, 'payment_methods', id]).delete()),
       tap(() => this.snackBarStatus.OpenComplete('Payment method removed'))
     )
   }
