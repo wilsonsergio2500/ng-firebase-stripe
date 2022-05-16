@@ -1,0 +1,41 @@
+<div fxLayout="column" fxFlexFill>
+  <mat-toolbar color="primary" fxflex>
+
+    <mat-toolbar-row>
+
+      <button mat-icon-button (click)="mobilenav.open('mouse')" *ngIf="mobileQuery.matches ? true : false">
+        <mat-icon aria-label="menu icon-button with a heart icon">menu</mat-icon>
+      </button>
+
+      <span class="app-title" routerLink="/">
+        {{title}}
+      </span>
+      <span class="fill-space"></span>
+
+
+      <ng-template #done>
+        <button mat-icon-button mat-raised-button [matMenuTriggerFor]="usermenu">
+          <mat-icon aria-label="profile">person</mat-icon>
+        </button>
+
+        <mat-menu #usermenu="matMenu" color="primary">
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Login</span>
+          </button>
+        </mat-menu>
+      </ng-template>
+
+    </mat-toolbar-row>
+
+  </mat-toolbar>
+  <mat-sidenav-container fxFlex>
+    <mat-sidenav #mobilenav [mode]="mobileQuery.matches ? 'over' : 'side'">
+
+    </mat-sidenav>
+
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-container>
+</div>

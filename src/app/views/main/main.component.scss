@@ -1,0 +1,45 @@
+
+:host {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  .mat-sidenav-container {
+    flex-grow: 1;
+  }
+
+  .fill-space {
+    flex: 1 1 auto;
+  }
+
+  .nav-item {
+    padding: 10px;
+
+    & li {
+      display: inline-block;
+      font-size: 0.8em;
+      list-style-type: none;
+      margin-left: 2px;
+    }
+  }
+
+  .user-photo-url-background {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
+
+  .main-content {
+    overflow-y: auto;
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+  }
+
+  .mat-sidenav {
+    width: 240px;
+    box-shadow: 0 0 4px 2px rgba(0,0,0,.2);
+  }
+}
+

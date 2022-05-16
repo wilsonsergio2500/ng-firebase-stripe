@@ -1,0 +1,23 @@
+
+<ng-container *ngIf="!paymentMethods?.length">
+  No Payment methods available at this moment
+</ng-container>
+
+<ng-container *ngIf="paymentMethods?.length">
+
+  <h3>Method of Payments</h3>
+
+  <mat-nav-list>
+    <mat-list-item *ngFor="let pm of paymentMethods" (click)="onSelect(pm)">
+      <div matLine>
+          <span class="card-selector-label">{{pm.card.brand}} **** {{pm.card.last4}} | Expires {{pm.card.exp_month}}/{{pm.card.exp_year}}</span>
+      </div>
+      <mat-checkbox [checked]="hasSelected(pm)"></mat-checkbox>
+      <buttom mat-raised-button (click)="onRemove(pm)" type="button" class="card-selector-remove-action">
+        <mat-icon color="warn">delete</mat-icon>
+      </buttom>
+    </mat-list-item>
+
+  </mat-nav-list>
+
+</ng-container>

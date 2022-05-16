@@ -1,0 +1,57 @@
+<div class="content">
+
+  <div class="centered">
+    <mat-card class="product-card">
+
+      <ng-container *ngIf="loading$ | async as loading; else done">
+        <loading-signal>
+          Loading Methods of Payment...
+        </loading-signal>
+      </ng-container>
+
+      <ng-template #done>
+
+        <form [formGroup]="formGroup" (ngSubmit)="submit()">
+
+          <mat-form-field class="block">
+            <input matInput type="text" placeholder="Name" formControlName="cardHolderName" autocapitalize="off">
+            <mat-error formControlOnErrorItem="cardHolderName"></mat-error>
+          </mat-form-field>
+
+
+          <ngx-stripe-card [options]="cardOptions"
+                           [elementsOptions]="elementsOptions"></ngx-stripe-card>
+
+
+          <loading-button [IsBusy]="addingCard$ | async" mat-raised-button type="submit">
+            <loading-button-ready>
+              Add Card
+            </loading-button-ready>
+            <loading-button-busy>
+              Adding Card...
+            </loading-button-busy>
+          </loading-button>
+
+
+        </form>
+
+        <ng-container *ngIf="cardError$ | async as error">
+          <div class="card-setup-error-container">
+            <mat-icon color="warn">error</mat-icon>
+            <div class="card-setup-error-message">{{error.message}}</div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="paymentMethods$ | async as pms">
+          <div>
+            <card-selector [paymentMethods]="pms" (onRemoveCard)="onRemove($event)"></card-selector>
+          </div>
+        </ng-container>
+
+      </ng-template>
+
+    </mat-card>
+  </div>
+
+
+</div>

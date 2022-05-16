@@ -1,0 +1,30 @@
+@import "variables";
+@import "mixins";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .content {
+    width: 100%;
+
+    @include lg {
+      width: 1200px;
+    }
+  }
+
+  .card-setup-error-container {
+    display: flex;
+    margin: 20px;
+    color: $mat-color-warn;
+
+    .mat-icon {
+      padding: 5px;
+    }
+
+    .card-setup-error-message{
+        padding:5px;
+    }
+  }
+}
