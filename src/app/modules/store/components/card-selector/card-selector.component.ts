@@ -24,7 +24,7 @@ export class CardSelectorComponent {
   }
 
   onRemove(pm: PaymentMethod) {
-    const { fireStoreId } = pm.metadata;
+    const { fireStoreId } = pm.metadata
     this.onRemoveCard.emit(fireStoreId);
   }
 

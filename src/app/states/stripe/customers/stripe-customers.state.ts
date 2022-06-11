@@ -145,6 +145,7 @@ export class StripeCustomersState {
     const { current } = ctx.getState();
     const { card, name } = action.request;
 
+    ctx.dispatch(new StripeCustomersCleanErrorAction());
     ctx.dispatch(new StripeCustomersSetAddingCardAsLoadingAction());
 
     const cardSetup = <ConfirmCardSetupData>{
@@ -191,7 +192,7 @@ export class StripeCustomersState {
     const { current } = ctx.getState();
     const { id } = action;
     return this.confirmationDialog.OnConfirm('Are you sure you would like to remove this payment method?').pipe(
-      mergeMap(() => this.schemas.subDocRef([current.id, 'payment_methods', id]).delete()),
+      mergeMap(() => this.schemas.doc([current.id, 'payment_methods', id]).delete()),
       tap(() => this.snackBarStatus.OpenComplete('Payment method removed'))
     )
   }
@@ -200,8 +201,8 @@ export class StripeCustomersState {
   @Action(StripeCustomersSetupCardErrorAction)
   onCardSetupError(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersSetupCardErrorAction) {
     const { request: cardSetupError } = action;
-    console.log(cardSetupError);
     ctx.patchState({ cardSetupError });
+    ctx.dispatch(new StripeCustomersSetAddingCardAsDoneAction());
   }
 
   @Action(StripeCustomersCleanErrorAction)

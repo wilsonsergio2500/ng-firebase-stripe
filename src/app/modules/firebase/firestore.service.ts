@@ -1,4 +1,4 @@
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, QueryFn } from "@angular/fire/firestore";
+import { AngularFirestore, QueryFn } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
@@ -7,6 +7,10 @@ export abstract class FirestoreService<T> {
 
   protected abstract basePath: string;
   constructor(protected firestore: AngularFirestore) { }
+
+  private get collection() {
+    return this.firestore.collection(`${this.basePath}`);
+  }
 
   doc$(id: string): Observable<T> {
     return this.firestore.doc<T>(`${this.basePath}/${id}`).valueChanges().pipe(
@@ -76,7 +80,6 @@ export abstract class FirestoreService<T> {
       }
     })
   }
-  
 
   subCollection$<TTypeOfSubCollection = T>(doc: string, collection: string, queryFn?: QueryFn) {
     return this.collection.doc(doc).collection<TTypeOfSubCollection>(collection, queryFn).valueChanges().pipe(
@@ -90,7 +93,7 @@ export abstract class FirestoreService<T> {
     );
   }
 
-  subDocRef(path: string[]) {
+  doc(path: string[]) {
     return this.collection.doc(path.length > 1 ? path.join('/') : path[0])
   }
 
@@ -101,12 +104,5 @@ export abstract class FirestoreService<T> {
   queryPath(doc: string, collection: string, queryFn?: QueryFn) {
     return this.collection.doc(doc).collection<T>(collection, queryFn);
   }
-
-
-
-  private get collection() {
-    return this.firestore.collection(`${this.basePath}`);
-  }
-
 
 }
