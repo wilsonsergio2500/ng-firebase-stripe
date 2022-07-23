@@ -10,7 +10,7 @@ import { AuthLogoutAction } from '../../states/auth/auth.actions';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  title = 'FireNgStripe';
+  title = 'Fire Stripe';
 
   mobileQuery: MediaQueryList;
 
