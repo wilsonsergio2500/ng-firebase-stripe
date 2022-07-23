@@ -19,9 +19,8 @@ export class StripeCustomersSetAddingCardAsDoneAction {
   static type = '[Stripe Customers] Set Adding Card As Done';
 }
 
-export class StripeCustomersLoadByIdAction {
+export class StripeCustomersLoadAction {
   static type = '[Stripe Customers] Get By Id';
-  constructor(public id: string) { }
 }
 
 export class StripeCustomersInitializeAction {

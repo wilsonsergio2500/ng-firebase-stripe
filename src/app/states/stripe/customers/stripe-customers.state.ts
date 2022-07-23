@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Store, State, Selector, StateContext, Action } from '@ngxs/store';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Subscription, from, of } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { StripeCustomersFireStore } from './schema/stripe-customers.firebase';
 import { IStripeCustomersFirebaseModel } from './schema/stripe-customers.schema';
 import { IStripeCustomersStateModel } from './stripe-customers.model';
-import { StripeCustomersSetAsLoadingAction, StripeCustomersSetAsDoneAction,  StripeCustomersLoadByIdAction, StripeCustomersInitializeAction, StripeCustomersConfirmCardPaymentAction, StripeCustomersSetupCardErrorAction, StripeCustomersLoadPaymentMethodsAction, StripeCustomersCleanErrorAction, StripeCustomersSetAddingCardAsLoadingAction, StripeCustomersSetAddingCardAsDoneAction, StripeCustomersRemovePaymentMethod } from './stripe-customers.actions';
+import { StripeCustomersSetAsLoadingAction, StripeCustomersSetAsDoneAction,  StripeCustomersInitializeAction, StripeCustomersConfirmCardPaymentAction, StripeCustomersSetupCardErrorAction, StripeCustomersLoadPaymentMethodsAction, StripeCustomersCleanErrorAction, StripeCustomersSetAddingCardAsLoadingAction, StripeCustomersSetAddingCardAsDoneAction, StripeCustomersRemovePaymentMethod, StripeCustomersLoadAction } from './stripe-customers.actions';
 import { tap, mergeMap, filter } from 'rxjs/operators';
 import { SnackbarStatusService } from '@customComponents/ux/snackbar-status/service/snackbar-status.service';
 import { ConfirmationDialogService } from '@customComponents/ux/confirmation-dialog/confirmation-dialog.service';
@@ -20,7 +20,7 @@ import { ConfirmCardSetupData, PaymentMethod, StripeError } from '@stripe/stripe
     loading: false,
     addingCard: false,
     paginationState: new FirebasePaginationInMemoryStateModel<IStripeCustomersFirebaseModel>(),
-    currentId: null,
+    currentUserId: null,
     current: null,
     selected: null,
     cardSetupError: null,
@@ -119,20 +119,22 @@ export class StripeCustomersState {
   @Action(StripeCustomersInitializeAction)
   onInitalize(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersInitializeAction) {
     const { id } = action;
-    return ctx.dispatch(new StripeCustomersLoadByIdAction(id));
+    ctx.patchState({ currentUserId: id });
+    ctx.dispatch(new StripeCustomersLoadAction());
+    return;
   }
 
-  @Action(StripeCustomersLoadByIdAction)
-  onGetById(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersLoadByIdAction) {
-    const { id } = action;
-    ctx.dispatch(new StripeCustomersSetAsLoadingAction());
-    return this.schemas.doc$(id).pipe(
+  @Action(StripeCustomersLoadAction)
+  onGetById(ctx: StateContext<IStripeCustomersStateModel>) {
+    const { currentUserId } = ctx.getState();
+    return this.schemas.doc$(currentUserId).pipe(
       filter(record => !!record),
       mergeMap(record => {
-        const current = { ...record, id };
+        const current = { ...record, id: currentUserId };
         ctx.patchState({ current });
         return of(current);
       }),
+      mergeMap(() => ctx.dispatch(new StripeCustomersSetAsLoadingAction())),
       tap(() => ctx.dispatch(new StripeCustomersLoadPaymentMethodsAction()))
     );
   }
@@ -189,9 +191,11 @@ export class StripeCustomersState {
   onRemovePaymentMethod(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersRemovePaymentMethod) {
     const { current } = ctx.getState();
     const { id } = action;
+    console.log(id);
     return this.confirmationDialog.OnConfirm('Are you sure you would like to remove this payment method?').pipe(
       mergeMap(() => this.schemas.doc([current.id, 'payment_methods', id]).delete()),
-      tap(() => this.snackBarStatus.OpenComplete('Payment method removed'))
+      tap(() => this.snackBarStatus.OpenComplete('Payment method removed')),
+      mergeMap(() => ctx.dispatch(new  StripeCustomersLoadAction()))
     )
   }
 

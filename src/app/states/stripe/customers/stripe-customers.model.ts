@@ -6,7 +6,7 @@ export interface IStripeCustomersStateModel {
   loading: boolean;
   addingCard: boolean;
   paginationState: IFirebasePaginationInMemoryState<IStripeCustomersFirebaseModel>;
-  currentId: string,
+  currentUserId: string,
   current: IStripeCustomersFirebaseModel;
   selected: IStripeCustomersFirebaseModel;
   cardSetupError: StripeError;
