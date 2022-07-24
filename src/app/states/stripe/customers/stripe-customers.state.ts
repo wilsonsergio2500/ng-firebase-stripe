@@ -5,7 +5,7 @@ import { Subscription, of } from 'rxjs';
 import { StripeCustomersFireStore } from './schema/stripe-customers.firebase';
 import { IStripeCustomersFirebaseModel } from './schema/stripe-customers.schema';
 import { IStripeCustomersStateModel } from './stripe-customers.model';
-import { StripeCustomersSetAsLoadingAction, StripeCustomersSetAsDoneAction,  StripeCustomersInitializeAction, StripeCustomersConfirmCardPaymentAction, StripeCustomersSetupCardErrorAction, StripeCustomersLoadPaymentMethodsAction, StripeCustomersCleanErrorAction, StripeCustomersSetAddingCardAsLoadingAction, StripeCustomersSetAddingCardAsDoneAction, StripeCustomersRemovePaymentMethod, StripeCustomersLoadAction } from './stripe-customers.actions';
+import { StripeCustomersSetAsLoadingAction, StripeCustomersSetAsDoneAction,  StripeCustomersInitializeAction, StripeCustomersConfirmCardSetuptAction, StripeCustomersSetupCardErrorAction, StripeCustomersLoadPaymentMethodsAction, StripeCustomersCleanErrorAction, StripeCustomersSetAddingCardAsLoadingAction, StripeCustomersSetAddingCardAsDoneAction, StripeCustomersRemovePaymentMethod, StripeCustomersLoadAction } from './stripe-customers.actions';
 import { tap, mergeMap, filter } from 'rxjs/operators';
 import { SnackbarStatusService } from '@customComponents/ux/snackbar-status/service/snackbar-status.service';
 import { ConfirmationDialogService } from '@customComponents/ux/confirmation-dialog/confirmation-dialog.service';
@@ -140,8 +140,8 @@ export class StripeCustomersState {
   }
   
 
-  @Action(StripeCustomersConfirmCardPaymentAction)
-  onConfirmCardPayment(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersConfirmCardPaymentAction) {
+  @Action(StripeCustomersConfirmCardSetuptAction)
+  onConfirmCardPayment(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersConfirmCardSetuptAction) {
     const { current } = ctx.getState();
     const { card, name } = action.request;
 
@@ -191,7 +191,6 @@ export class StripeCustomersState {
   onRemovePaymentMethod(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersRemovePaymentMethod) {
     const { current } = ctx.getState();
     const { id } = action;
-    console.log(id);
     return this.confirmationDialog.OnConfirm('Are you sure you would like to remove this payment method?').pipe(
       mergeMap(() => this.schemas.doc([current.id, 'payment_methods', id]).delete()),
       tap(() => this.snackBarStatus.OpenComplete('Payment method removed')),

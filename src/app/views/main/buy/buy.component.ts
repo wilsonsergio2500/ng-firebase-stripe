@@ -4,7 +4,7 @@ import { Select, Store } from '@ngxs/store';
 import { PaymentMethod, StripeCardElementOptions, StripeElementsOptions, StripeError } from '@stripe/stripe-js';
 import { StripeCardComponent } from 'ngx-stripe';
 import { FormTypeBuilder, NgTypeFormGroup } from 'reactive-forms-typed';
-import { StripeCustomersConfirmCardPaymentAction, StripeCustomersRemovePaymentMethod } from '@states/stripe/customers/stripe-customers.actions';
+import { StripeCustomersConfirmCardSetuptAction, StripeCustomersRemovePaymentMethod } from '@states/stripe/customers/stripe-customers.actions';
 import { IPaymentForm } from './payment.form';
 import { StripeCustomersState } from '@states/stripe/customers/stripe-customers.state';
 import { Observable } from 'rxjs';
@@ -55,11 +55,15 @@ export class BuyComponent implements OnInit {
   };
 
   submit() {
-    this.store.dispatch(new StripeCustomersConfirmCardPaymentAction({ card: this.card.element, name: this.formGroup.value.cardHolderName }))
+    this.store.dispatch(new StripeCustomersConfirmCardSetuptAction({ card: this.card.element, name: this.formGroup.value.cardHolderName }))
   }
 
   onRemove(id: string) {
     this.store.dispatch(new StripeCustomersRemovePaymentMethod(id));
+  }
+
+  onSelectPayment(pm : PaymentMethod) {
+    console.log(pm);
   }
 
 }

@@ -1,7 +1,6 @@
 
 import { StripeError } from '@stripe/stripe-js';
-import { IStripeCustomersFirebaseModel } from './schema/stripe-customers.schema';
-import { IConfirmCardPaymenRequest } from './stripe-customers.model';
+import { IConfirmCardSetupRequest, IPaymentRequest } from './stripe-customers.model';
 
 export class StripeCustomersSetAsLoadingAction {
   static type = '[Stripe Customers] Set As Loading';
@@ -28,9 +27,9 @@ export class StripeCustomersInitializeAction {
   constructor(public id: string) { }
 }
 
-export class StripeCustomersConfirmCardPaymentAction {
+export class StripeCustomersConfirmCardSetuptAction {
   static type = '[Stripe Customers] Confirm Card Payment';
-  constructor(public request: IConfirmCardPaymenRequest) { }
+  constructor(public request: IConfirmCardSetupRequest) { }
 }
 
 export class StripeCustomersSetupCardErrorAction {
@@ -49,4 +48,9 @@ export class StripeCustomersCleanErrorAction {
 export class StripeCustomersRemovePaymentMethod {
   static type = '[Stripe Customers] Remove Payment Method';
   constructor(public id: string) {}
+}
+
+export class StripeCustomersAddPaymentAction {
+  static type = '[Stripe Customers] Add Payment';
+  constructor(public request: IPaymentRequest) { }
 }

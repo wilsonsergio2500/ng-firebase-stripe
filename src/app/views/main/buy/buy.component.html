@@ -46,7 +46,7 @@
 
         <ng-container *ngIf="paymentMethods$ | async as pms">
           <div>
-            <card-selector [paymentMethods]="pms" (onRemoveCard)="onRemove($event)"></card-selector>
+            <card-selector [paymentMethods]="pms" (onRemoveCard)="onRemove($event)" (onSelectPaymentMethod)="onSelectPayment($event)"></card-selector>
           </div>
         </ng-container>
 

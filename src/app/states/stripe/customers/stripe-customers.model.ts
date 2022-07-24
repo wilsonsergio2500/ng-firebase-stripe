@@ -13,7 +13,17 @@ export interface IStripeCustomersStateModel {
   paymentMethods: PaymentMethod[];
 }
 
-export interface IConfirmCardPaymenRequest {
+export interface IConfirmCardSetupRequest {
   card: StripeCardElement,
   name: string;
+}
+
+export type currencyType = "usd" | "eur" | "gbp" | "jpy";
+export type PaymentStatus = "new"
+
+export interface IPaymentRequest {
+  payment_method: string;
+  currency: currencyType;
+  amount: number;
+  status: PaymentStatus;
 }

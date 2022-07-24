@@ -11,11 +11,13 @@ export class CardSelectorComponent {
   @Input() paymentMethods: PaymentMethod[] = [];
   @Input() displayAddFirstMethod = false;
   @Output() onRemoveCard = new EventEmitter<string>();
+  @Output() onSelectPaymentMethod = new EventEmitter<PaymentMethod>();
 
   private currentId: string = null;
 
   onSelect(pm: PaymentMethod) {
     this.currentId = pm?.id;
+    this.onSelectPaymentMethod.emit(pm);
   }
 
   hasSelected(pm: PaymentMethod) {
