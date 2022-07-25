@@ -25,5 +25,5 @@ export interface IPaymentRequest {
   payment_method: string;
   currency: currencyType;
   amount: number;
-  status: PaymentStatus;
+  status?: PaymentStatus;
 }

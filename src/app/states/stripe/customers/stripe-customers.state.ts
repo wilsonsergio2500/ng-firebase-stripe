@@ -5,13 +5,14 @@ import { Subscription, of } from 'rxjs';
 import { StripeCustomersFireStore } from './schema/stripe-customers.firebase';
 import { IStripeCustomersFirebaseModel } from './schema/stripe-customers.schema';
 import { IStripeCustomersStateModel } from './stripe-customers.model';
-import { StripeCustomersSetAsLoadingAction, StripeCustomersSetAsDoneAction,  StripeCustomersInitializeAction, StripeCustomersConfirmCardSetuptAction, StripeCustomersSetupCardErrorAction, StripeCustomersLoadPaymentMethodsAction, StripeCustomersCleanErrorAction, StripeCustomersSetAddingCardAsLoadingAction, StripeCustomersSetAddingCardAsDoneAction, StripeCustomersRemovePaymentMethod, StripeCustomersLoadAction } from './stripe-customers.actions';
+import { StripeCustomersSetAsLoadingAction, StripeCustomersSetAsDoneAction,  StripeCustomersInitializeAction, StripeCustomersConfirmCardSetuptAction, StripeCustomersSetupCardErrorAction, StripeCustomersLoadPaymentMethodsAction, StripeCustomersCleanErrorAction, StripeCustomersSetAddingCardAsLoadingAction, StripeCustomersSetAddingCardAsDoneAction, StripeCustomersRemovePaymentMethod, StripeCustomersLoadAction, StripeCustomersAddPaymentAction } from './stripe-customers.actions';
 import { tap, mergeMap, filter } from 'rxjs/operators';
 import { SnackbarStatusService } from '@customComponents/ux/snackbar-status/service/snackbar-status.service';
 import { ConfirmationDialogService } from '@customComponents/ux/confirmation-dialog/confirmation-dialog.service';
 import { FirebasePaginationInMemoryStateModel } from '@firebase/paginations/firebase-pagination-inmemory';
 import { StripeService } from 'ngx-stripe';
 import { ConfirmCardSetupData, PaymentMethod, StripeError } from '@stripe/stripe-js';
+import { stripeHelpers } from '@appUtils/stripe-helpers';
 
 
 @State<IStripeCustomersStateModel>({
@@ -199,6 +200,7 @@ export class StripeCustomersState {
   }
 
 
+
   @Action(StripeCustomersSetupCardErrorAction)
   onCardSetupError(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersSetupCardErrorAction) {
     const { request: cardSetupError } = action;
@@ -211,4 +213,12 @@ export class StripeCustomersState {
     ctx.patchState({ cardSetupError: null });
   }
 
+  @Action(StripeCustomersAddPaymentAction)
+  onAddPaymentAction(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersAddPaymentAction) {
+    const { current } = ctx.getState();
+    const { payment_method, currency, amount  } = action.request;
+    const paymentId = this.schemas.fireStoreId;
+    return this.schemas.merge([current.id, 'payments', paymentId], { status: "new", payment_method, currency, amount: stripeHelpers.formatAmount(amount, currency) });
+
+  }
 }

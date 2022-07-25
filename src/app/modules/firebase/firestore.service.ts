@@ -12,6 +12,10 @@ export abstract class FirestoreService<T> {
     return this.firestore.collection(`${this.basePath}`);
   }
 
+  get fireStoreId() {
+    return this.firestore.createId();
+  }
+
   doc$(id: string): Observable<T> {
     return this.firestore.doc<T>(`${this.basePath}/${id}`).valueChanges().pipe(
       tap(r => {
