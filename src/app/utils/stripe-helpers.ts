@@ -1,3 +1,4 @@
+import { AsEnforcedType } from "./type-helpers";
 
 export class stripeHelpers {
 
@@ -8,12 +9,15 @@ export class stripeHelpers {
   }
 
   public static hasZeroDecimalCurrency(amount, currency) {
-    let numberFormat = new Intl.NumberFormat(['en-US'], {
+
+    const options = {
       style: 'currency',
       currency: currency,
-      /*currencyDisplay: 'symbol',*/
-    });
-    const parts = numberFormat.formatToParts(amount);
+      currencyDisplay: 'symbol',
+    }
+
+    let numberFormat = new window.Intl.NumberFormat(['en-US'], options);
+    const parts = AsEnforcedType<AsShimLibNumberFormat>(numberFormat).formatToParts(amount);
     let zeroDecimalCurrency = true;
     for (let part of parts) {
       if (part.type === 'decimal') {
@@ -22,4 +26,10 @@ export class stripeHelpers {
     }
     return zeroDecimalCurrency;
   }
+}
+
+interface NumberFormatPart { type: string; value: string; }
+
+interface AsShimLibNumberFormat {
+  formatToParts(number?: number | bigint): NumberFormatPart[];
 }
