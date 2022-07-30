@@ -50,6 +50,11 @@
           </div>
         </ng-container>
 
+        <ng-container *ngIf="preferredPaymentMethod$ | async as pm">
+          <purchase [productDetail]="productDetail" (onPurchase)="onPurchase($event)"></purchase>
+        </ng-container>
+
+
       </ng-template>
 
     </mat-card>

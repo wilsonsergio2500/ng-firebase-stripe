@@ -1,5 +1,5 @@
 
-import { StripeError } from '@stripe/stripe-js';
+import { PaymentMethod, StripeError } from '@stripe/stripe-js';
 import { IConfirmCardSetupRequest, IPaymentRequest } from './stripe-customers.model';
 
 export class StripeCustomersSetAsLoadingAction {
@@ -39,6 +39,11 @@ export class StripeCustomersSetupCardErrorAction {
 
 export class StripeCustomersLoadPaymentMethodsAction {
   static type = '[Stripe Customers] Load Payment Methods';
+}
+
+export class StripeCustomersSetPreferredPaymentMethod {
+  static type = '[Stripe Customers] Set Preferred Payment Method';
+  constructor(public request: PaymentMethod) { }
 }
 
 export class StripeCustomersCleanErrorAction {

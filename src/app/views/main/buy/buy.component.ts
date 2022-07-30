@@ -4,10 +4,11 @@ import { Select, Store } from '@ngxs/store';
 import { PaymentMethod, StripeCardElementOptions, StripeElementsOptions, StripeError } from '@stripe/stripe-js';
 import { StripeCardComponent } from 'ngx-stripe';
 import { FormTypeBuilder, NgTypeFormGroup } from 'reactive-forms-typed';
-import { StripeCustomersConfirmCardSetuptAction, StripeCustomersRemovePaymentMethod } from '@states/stripe/customers/stripe-customers.actions';
+import { StripeCustomersAddPaymentAction, StripeCustomersConfirmCardSetuptAction, StripeCustomersRemovePaymentMethod, StripeCustomersSetPreferredPaymentMethod } from '@states/stripe/customers/stripe-customers.actions';
 import { IPaymentForm } from './payment.form';
 import { StripeCustomersState } from '@states/stripe/customers/stripe-customers.state';
 import { Observable } from 'rxjs';
+import { currencyType } from '../../../states/stripe/customers/stripe-customers.model';
 
 @Component({
   selector: 'buy',
@@ -23,6 +24,9 @@ export class BuyComponent implements OnInit {
   @Select(StripeCustomersState.getCardErrors) cardError$: Observable<StripeError>;
   @Select(StripeCustomersState.IsAddingCardWorking) addingCard$: Observable<boolean>;
   @Select(StripeCustomersState.IsLoading) loading$: Observable<boolean>;
+  @Select(StripeCustomersState.preferredPaymentMethod) preferredPaymentMethod$: Observable<PaymentMethod>;
+
+  productDetail = { name: 'A Great Product', currency : 'usd', price: 100 }
 
   constructor(
     private store: Store,
@@ -62,8 +66,13 @@ export class BuyComponent implements OnInit {
     this.store.dispatch(new StripeCustomersRemovePaymentMethod(id));
   }
 
-  onSelectPayment(pm : PaymentMethod) {
-    console.log(pm);
+  onSelectPayment(pm: PaymentMethod) {
+    this.store.dispatch(new StripeCustomersSetPreferredPaymentMethod(pm));
+  }
+
+  onPurchase(pd: { name: string, currency: string, price: number }) {
+    console.log(pd);
+    this.store.dispatch(new StripeCustomersAddPaymentAction({ currency: pd.currency as currencyType, amount: pd.price}))
   }
 
 }

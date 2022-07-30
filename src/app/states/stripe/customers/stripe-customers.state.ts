@@ -5,7 +5,7 @@ import { Subscription, of } from 'rxjs';
 import { StripeCustomersFireStore } from './schema/stripe-customers.firebase';
 import { IStripeCustomersFirebaseModel } from './schema/stripe-customers.schema';
 import { IStripeCustomersStateModel } from './stripe-customers.model';
-import { StripeCustomersSetAsLoadingAction, StripeCustomersSetAsDoneAction,  StripeCustomersInitializeAction, StripeCustomersConfirmCardSetuptAction, StripeCustomersSetupCardErrorAction, StripeCustomersLoadPaymentMethodsAction, StripeCustomersCleanErrorAction, StripeCustomersSetAddingCardAsLoadingAction, StripeCustomersSetAddingCardAsDoneAction, StripeCustomersRemovePaymentMethod, StripeCustomersLoadAction, StripeCustomersAddPaymentAction } from './stripe-customers.actions';
+import { StripeCustomersSetAsLoadingAction, StripeCustomersSetAsDoneAction,  StripeCustomersInitializeAction, StripeCustomersConfirmCardSetuptAction, StripeCustomersSetupCardErrorAction, StripeCustomersLoadPaymentMethodsAction, StripeCustomersCleanErrorAction, StripeCustomersSetAddingCardAsLoadingAction, StripeCustomersSetAddingCardAsDoneAction, StripeCustomersRemovePaymentMethod, StripeCustomersLoadAction, StripeCustomersAddPaymentAction, StripeCustomersSetPreferredPaymentMethod } from './stripe-customers.actions';
 import { tap, mergeMap, filter } from 'rxjs/operators';
 import { SnackbarStatusService } from '@customComponents/ux/snackbar-status/service/snackbar-status.service';
 import { ConfirmationDialogService } from '@customComponents/ux/confirmation-dialog/confirmation-dialog.service';
@@ -26,6 +26,7 @@ import { stripeHelpers } from '@appUtils/stripe-helpers';
     selected: null,
     cardSetupError: null,
     paymentMethods: [],
+    preferredPaymentMethod: null
   }
 })
 @Injectable()
@@ -80,6 +81,11 @@ export class StripeCustomersState {
   @Selector()
   static getSelected(state: IStripeCustomersStateModel): IStripeCustomersFirebaseModel {
     return state.selected;
+  }
+
+  @Selector()
+  static preferredPaymentMethod(state: IStripeCustomersStateModel): PaymentMethod {
+    return state.preferredPaymentMethod
   }
 
   @Selector()
@@ -215,10 +221,17 @@ export class StripeCustomersState {
 
   @Action(StripeCustomersAddPaymentAction)
   onAddPaymentAction(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersAddPaymentAction) {
-    const { current } = ctx.getState();
-    const { payment_method, currency, amount  } = action.request;
+    const { current, preferredPaymentMethod: payment_method } = ctx.getState();
+    const { currency, amount  } = action.request;
     const paymentId = this.schemas.fireStoreId;
-    return this.schemas.merge([current.id, 'payments', paymentId], { status: "new", payment_method, currency, amount: stripeHelpers.formatAmount(amount, currency) });
+    return this.schemas.merge([current.id, 'payments', paymentId], { status: "new", payment_method: payment_method.id, currency, amount: stripeHelpers.formatAmount(amount, currency) });
 
   }
+
+  @Action(StripeCustomersSetPreferredPaymentMethod)
+  onSetPrefferedPaymentMethod(ctx: StateContext<IStripeCustomersStateModel>, action: StripeCustomersSetPreferredPaymentMethod) {
+    ctx.patchState({ preferredPaymentMethod: action.request });
+  }
+
+
 }
