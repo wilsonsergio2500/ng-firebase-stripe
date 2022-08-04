@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgxsFirebaseStateHelperModule } from './modules/firebase-state-helper/firebase-state-helper.module';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 
@@ -30,7 +31,8 @@ import { RegisterComponent } from './views/register/register.component';
     NgxsRouterPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production}),
     MaterialComponentsModule,
-    NgxStripeModule.forRoot(environment.stripe.key)
+    NgxStripeModule.forRoot(environment.stripe.key),
+    NgxsFirebaseStateHelperModule.forRoot({ loggerOn: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
