@@ -9,6 +9,8 @@ import { IPaymentForm } from './payment.form';
 import { StripeCustomersState } from '@states/stripe/customers/stripe-customers.state';
 import { Observable } from 'rxjs';
 import { currencyType } from '../../../states/stripe/customers/stripe-customers.model';
+import { StripePaymentMethodsState } from '@states/stripe/payment-methods/stripe-payment-methods.state';
+import { IStripePaymentMethodFirebaseModel } from '@states/stripe/payment-methods/schema/stripe-payment-methods.schema';
 
 @Component({
   selector: 'buy',
@@ -20,11 +22,14 @@ export class BuyComponent implements OnInit {
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
   formGroup: NgTypeFormGroup<IPaymentForm>;
 
-  @Select(StripeCustomersState.getUserPaymentMethods) paymentMethods$: Observable<PaymentMethod>;
+  /*@Select(StripeCustomersState.getUserPaymentMethods) paymentMethods$: Observable<PaymentMethod>;*/
   @Select(StripeCustomersState.getCardErrors) cardError$: Observable<StripeError>;
+
   @Select(StripeCustomersState.IsAddingCardWorking) addingCard$: Observable<boolean>;
   @Select(StripeCustomersState.IsLoading) loading$: Observable<boolean>;
   @Select(StripeCustomersState.preferredPaymentMethod) preferredPaymentMethod$: Observable<PaymentMethod>;
+
+  @Select(StripePaymentMethodsState.getPaymentMethods) paymentMethods$: Observable<IStripePaymentMethodFirebaseModel>;
 
   productDetail = { name: 'A Great Product', currency : 'usd', price: 100 }
 

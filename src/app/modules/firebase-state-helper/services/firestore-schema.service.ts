@@ -1,10 +1,11 @@
-import { Inject, Optional } from "@angular/core";
+import { Inject, Injectable, Optional } from "@angular/core";
 import { AngularFirestore, QueryFn } from "@angular/fire/firestore";
 import { from, Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { FIREBASE_STATE_CONFIG, INgxsStateHelperModuleConfig } from "../tokens/firebase-state-config.token";
 import * as firebase from 'firebase'
 
+@Injectable()
 export abstract class FireStoreSchemaService<T>{
 
 

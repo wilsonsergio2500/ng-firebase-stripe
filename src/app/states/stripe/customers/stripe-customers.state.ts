@@ -13,6 +13,7 @@ import { FirebasePaginationInMemoryStateModel } from '@firebase/paginations/fire
 import { StripeService } from 'ngx-stripe';
 import { ConfirmCardSetupData, PaymentMethod, StripeError } from '@stripe/stripe-js';
 import { stripeHelpers } from '@appUtils/stripe-helpers';
+import { StripePaymentMethodsLoadCurrentUserAction } from '../payment-methods/stripe-payment-methods.actions';
 
 
 @State<IStripeCustomersStateModel>({
@@ -141,6 +142,7 @@ export class StripeCustomersState {
         ctx.patchState({ current });
         return of(current);
       }),
+      mergeMap(currentUser => ctx.dispatch(new StripePaymentMethodsLoadCurrentUserAction(currentUser))),
       mergeMap(() => ctx.dispatch(new StripeCustomersSetAsLoadingAction())),
       tap(() => ctx.dispatch(new StripeCustomersLoadPaymentMethodsAction()))
     );

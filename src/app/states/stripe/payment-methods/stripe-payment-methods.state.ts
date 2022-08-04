@@ -7,7 +7,7 @@ import { tap, mergeMap, filter } from 'rxjs/operators';
 import { SnackbarStatusService } from '@customComponents/ux/snackbar-status/service/snackbar-status.service';
 import { ConfirmationDialogService } from '@customComponents/ux/confirmation-dialog/confirmation-dialog.service';
 import { StripeService } from 'ngx-stripe';
-import { ConfirmCardSetupData } from '@stripe/stripe-js';
+import { ConfirmCardSetupData, StripeError } from '@stripe/stripe-js';
 import { IStripePaymentMethodFirebaseModel } from './schema/stripe-payment-methods.schema';
 import { iif } from 'rxjs';
 
@@ -47,6 +47,11 @@ export class StripePaymentMethodsState {
   @Selector()
   static getPaymentMethods(state: IStripePaymentMethodsStateModel): IStripePaymentMethodFirebaseModel[] {
     return state.records;
+  }
+
+  @Selector()
+  static getPaymentSetupError(state: IStripePaymentMethodsStateModel) : StripeError {
+    return state.cardSetupError;
   }
 
   @Selector()
