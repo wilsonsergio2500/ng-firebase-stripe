@@ -6,12 +6,10 @@ export const addPaymentMethodDetails = functions.firestore
   .document('/stripe_customers/{userId}/payment_methods/{pushId}')
   .onCreate(async (snap, context) => {
     try {
-      const { pushId } = context.params;
-      const paymentMethodId = snap.data().id;
+      const paymentMethodId = snap.data().paymentMethodId;
       const paymentMethod = await stripe.paymentMethods.retrieve(
         paymentMethodId
       );
-      paymentMethod.metadata!.fireStoreId = pushId;
       await snap.ref.set(paymentMethod);
       // Create a new SetupIntent so the customer can add a new method next time.
       const intent = await stripe.setupIntents.create({

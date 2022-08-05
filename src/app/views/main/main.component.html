@@ -13,7 +13,7 @@
       <span class="fill-space"></span>
 
 
-      <ng-template #done>
+      <!--<ng-template #done>-->
         <button mat-icon-button mat-raised-button [matMenuTriggerFor]="usermenu">
           <mat-icon aria-label="profile">person</mat-icon>
         </button>
@@ -21,10 +21,10 @@
         <mat-menu #usermenu="matMenu" color="primary">
           <button mat-menu-item (click)="logout()">
             <mat-icon>exit_to_app</mat-icon>
-            <span>Login</span>
+            <span>Logout</span>
           </button>
         </mat-menu>
-      </ng-template>
+      <!--</ng-template>-->
 
     </mat-toolbar-row>
 

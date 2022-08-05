@@ -1,5 +1,5 @@
-import { ById, SetupPaymentError, SetupPaymentIntent } from "../payment-methods/stripe-payment-methods.model";
-import { PreferredPaymentType, SetupPaymentType, StripeCustomerType } from "./payment-method.model";
+import { ByIdType } from "../customer/customer.model";
+import { PreferredPaymentType, SetupPaymentErrorType, SetupPaymentIntentType, SetupPaymentType, StripeCustomerType } from "./payment-method.model";
 
 
 export class PaymentMethodSetAsLoadingAction {
@@ -26,12 +26,16 @@ export class PaymentMethodSetupAction {
 
 export class PaymentMethodSetupOnErrorAction {
   static readonly type = '[Payment Method] Setup Error';
-  constructor(public request: SetupPaymentError) { }
+  constructor(public request: SetupPaymentErrorType) { }
+}
+
+export class PaymentMethodClearUpSetupErrorAction {
+  static readonly type = '[Payment Method] Clear Setup Error';
 }
 
 export class PaymentMethodAddAction {
   static readonly type = '[Payment Method] Add';
-  constructor(public request: SetupPaymentIntent) { }
+  constructor(public request: SetupPaymentIntentType) { }
 }
 
 export class PaymentMethodSetPreferredAction {
@@ -41,37 +45,5 @@ export class PaymentMethodSetPreferredAction {
 
 export class PaymentMethodRemoveAction {
   static readonly type = '[Payment Method] Remove';
-  constructor(public request: ById) { }
+  constructor(public request: ByIdType) { }
 }
-
-//export class PaymentMethodCreateAction{
-//   static readonly type = '[Payment Method] Create';
-//  constructor(public request: IPaymentMethodFirebaseModel) { }
-//}
-
-//export class PaymentMethodUpdateAction{
-//  static type = '[Payment Method] Update';
-//  constructor(public request: IPaymentMethodFirebaseModel) { }
-//}
-
-//export class PaymentMethodRemoveAction{
-//  static type = '[Payment Method] Remove';
-//  constructor(public request: IPaymentMethodFirebaseModel) { }
-//}
-
-//export class PaymentMethodGetByIdAction{
-//  static type = '[Payment Method] Get By Id';
-//  constructor(public id: string) { }
-//}
-
-//export class PaymentMethodLoadFirstPageAction{
-//  static type = '[Payment Method] Load First Page';
-//}
-
-//export class PaymentMethodLoadNextPageAction{
-//  static type = '[Payment Method] Load Next Page';
-//}
-
-//export class PaymentMethodLoadPreviousPageAction{
-//  static type = '[Payment Method] Load Previous Page';
-//}

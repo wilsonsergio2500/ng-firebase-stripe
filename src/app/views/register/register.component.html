@@ -12,19 +12,19 @@
 
     <div>
 
-      <form [formGroup]="formGroup" fxFlex fxLayout="row wrap" (ngSubmit)="Submit()">
+      <form [formGroup]="formGroup" (ngSubmit)="Submit()" class="form-container">
 
-        <mat-form-field fxFlex="100">
+        <mat-form-field>
           <input matInput type="text" placeholder="Email" formControlName="username" autocomplete="off" autocapitalize="off">
           <mat-error formControlOnErrorItem="username"></mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex="100" fxFlex.gt-sm="50">
+        <mat-form-field>
           <input matInput type="Password" placeholder="Password" formControlName="password" autocapitalize="off">
           <mat-error formControlOnErrorItem="password"></mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex="100" fxFlex.gt-sm="50">
+        <mat-form-field>
           <input matInput type="Password" placeholder="Confirm Password" formControlName="confirmPassword" autocapitalize="off">
           <mat-error formControlOnErrorItem="confirmPassword"></mat-error>
         </mat-form-field>

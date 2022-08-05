@@ -4,6 +4,7 @@ import { ICustomerStateModel } from './customer.model';
 import { CustomerSetAsLoadingAction, CustomerSetAsDoneAction, CustomerIntializeAction } from './customer.actions';
 import { tap, mergeMap } from 'rxjs/operators';
 import { CustomerFireStoreService } from './schema/customer.firebase';
+import { PaymentInitializeAction } from '../payment/payment.actions';
 
 
 @State<ICustomerStateModel>({
@@ -47,7 +48,10 @@ export class CustomerState {
         console.log(currentStripeCustomer);
         ctx.patchState({ currentStripeCustomer })
       }),
-      mergeMap(() => ctx.dispatch(new CustomerSetAsDoneAction()))
+      mergeMap(() => ctx.dispatch([
+        new PaymentInitializeAction({id}),
+        new CustomerSetAsDoneAction()
+      ]))
     )
   }
 

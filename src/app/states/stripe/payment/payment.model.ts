@@ -1,4 +1,4 @@
-import { currencyType, PaymentStatus } from "../customers/stripe-customers.model";
+import { currencyType, PaymentStatus } from "./schema/payment.schema";
 
 export interface IPaymentStateModel {
     loading: boolean;

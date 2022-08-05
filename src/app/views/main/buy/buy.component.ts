@@ -4,13 +4,14 @@ import { Select, Store } from '@ngxs/store';
 import { PaymentMethod, StripeCardElementOptions, StripeElementsOptions, StripeError } from '@stripe/stripe-js';
 import { StripeCardComponent } from 'ngx-stripe';
 import { FormTypeBuilder, NgTypeFormGroup } from 'reactive-forms-typed';
-import { StripeCustomersAddPaymentAction, StripeCustomersConfirmCardSetuptAction, StripeCustomersRemovePaymentMethod, StripeCustomersSetPreferredPaymentMethod } from '@states/stripe/customers/stripe-customers.actions';
 import { IPaymentForm } from './payment.form';
-import { StripeCustomersState } from '@states/stripe/customers/stripe-customers.state';
 import { Observable } from 'rxjs';
-import { currencyType } from '../../../states/stripe/customers/stripe-customers.model';
-import { StripePaymentMethodsState } from '@states/stripe/payment-methods/stripe-payment-methods.state';
-import { IStripePaymentMethodFirebaseModel } from '@states/stripe/payment-methods/schema/stripe-payment-methods.schema';
+import { PaymentMethodState } from '@states/stripe/payment-method/payment-method.state';
+import { CustomerState } from '@states/stripe/customer/customer.state';
+import { IPaymentMethodFireStoreModel } from '@states/stripe/payment-method/schema/payment-method.schema';
+import { PaymentMethodRemoveAction, PaymentMethodSetPreferredAction, PaymentMethodSetupAction } from '../../../states/stripe/payment-method/payment-method.actions';
+import { PaymentCreateAction } from '@states/stripe/payment/payment.actions';
+import { currencyType } from '../../../modules/store/components/purchase/purchase.component';
 
 @Component({
   selector: 'buy',
@@ -22,14 +23,14 @@ export class BuyComponent implements OnInit {
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
   formGroup: NgTypeFormGroup<IPaymentForm>;
 
-  /*@Select(StripeCustomersState.getUserPaymentMethods) paymentMethods$: Observable<PaymentMethod>;*/
-  @Select(StripeCustomersState.getCardErrors) cardError$: Observable<StripeError>;
+  @Select(PaymentMethodState.getPreferredPaymentMethod) preferredPaymentMethod$: Observable<PaymentMethod>;
+  @Select(PaymentMethodState.getPaymentMethods) paymentMethods$: Observable<IPaymentMethodFireStoreModel>;
+  @Select(PaymentMethodState.getPaymentSetupError) cardError$: Observable<StripeError>;
+  @Select(PaymentMethodState.IsLoading) addingCard$: Observable<boolean>;
 
-  @Select(StripeCustomersState.IsAddingCardWorking) addingCard$: Observable<boolean>;
-  @Select(StripeCustomersState.IsLoading) loading$: Observable<boolean>;
-  @Select(StripeCustomersState.preferredPaymentMethod) preferredPaymentMethod$: Observable<PaymentMethod>;
 
-  @Select(StripePaymentMethodsState.getPaymentMethods) paymentMethods$: Observable<IStripePaymentMethodFirebaseModel>;
+  @Select(CustomerState.IsLoading) loading$: Observable<boolean>;
+
 
   productDetail = { name: 'A Great Product', currency : 'usd', price: 100 }
 
@@ -64,20 +65,20 @@ export class BuyComponent implements OnInit {
   };
 
   submit() {
-    this.store.dispatch(new StripeCustomersConfirmCardSetuptAction({ card: this.card.element, name: this.formGroup.value.cardHolderName }))
+    this.store.dispatch(new PaymentMethodSetupAction({ card: this.card.element, name: this.formGroup.value.cardHolderName }))
   }
 
   onRemove(id: string) {
-    this.store.dispatch(new StripeCustomersRemovePaymentMethod(id));
+    this.store.dispatch(new PaymentMethodRemoveAction({ id }));
   }
 
-  onSelectPayment(pm: PaymentMethod) {
-    this.store.dispatch(new StripeCustomersSetPreferredPaymentMethod(pm));
+  onSelectPayment(pm: IPaymentMethodFireStoreModel) {
+    this.store.dispatch(new PaymentMethodSetPreferredAction(pm));
   }
 
   onPurchase(pd: { name: string, currency: string, price: number }) {
     console.log(pd);
-    this.store.dispatch(new StripeCustomersAddPaymentAction({ currency: pd.currency as currencyType, amount: pd.price}))
+    this.store.dispatch(new PaymentCreateAction({ currency: pd.currency as currencyType, amount: pd.price}))
   }
 
 }

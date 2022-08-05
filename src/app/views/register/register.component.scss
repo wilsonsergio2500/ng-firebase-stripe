@@ -8,6 +8,9 @@
     height: 100vh;
     justify-content: center;
     margin-top: -10vh;
+    .form-container{
+        flex-direction:column;
+    }
   }
 
   .logo-header {

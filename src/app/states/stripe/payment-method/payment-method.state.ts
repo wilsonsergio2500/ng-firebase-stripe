@@ -5,11 +5,14 @@ import { Subscription, from, of, iif } from 'rxjs';
 import { Navigate } from '@ngxs/router-plugin';
 import { AuthState } from '@states/auth/auth.state';
 import { IPaymentMethodStateModel } from './payment-method.model';
-import { PaymentMethodSetAsLoadingAction, PaymentMethodSetAsDoneAction, PaymentMethodCreateAction, PaymentMethodUpdateAction, PaymentMethodRemoveAction, PaymentMethodGetByIdAction, PaymentMethodLoadFirstPageAction, PaymentMethodLoadNextPageAction, PaymentMethodLoadPreviousPageAction, PaymentMethodInitializeAction, PaymentMethodLoadAllAction, PaymentMethodSetupAction, PaymentMethodSetupOnErrorAction, PaymentMethodAddAction, PaymentMethodSetPreferredAction } from './payment-method.actions';
+import { PaymentMethodSetAsLoadingAction, PaymentMethodSetAsDoneAction, PaymentMethodRemoveAction, PaymentMethodInitializeAction, PaymentMethodLoadAllAction, PaymentMethodSetupAction, PaymentMethodSetupOnErrorAction, PaymentMethodAddAction, PaymentMethodSetPreferredAction, PaymentMethodClearUpSetupErrorAction } from './payment-method.actions';
 import { tap, mergeMap, delay, filter, finalize, catchError } from 'rxjs/operators';
 import { StripeService } from 'ngx-stripe';
-import { ConfirmCardSetupData } from '@stripe/stripe-js';
+import { ConfirmCardSetupData, StripeError } from '@stripe/stripe-js';
 import { PaymentMethodFireStoreService } from './schema/payment-method.firebase';
+import { SnackbarStatusService } from '@customComponents/ux/snackbar-status/service/snackbar-status.service';
+import { ConfirmationDialogService } from '@customComponents/ux/confirmation-dialog/confirmation-dialog.service';
+import { IPaymentMethodFireStoreModel } from './schema/payment-method.schema';
 
 
 @State<IPaymentMethodStateModel>({
@@ -25,7 +28,6 @@ import { PaymentMethodFireStoreService } from './schema/payment-method.firebase'
 @Injectable()
 export class PaymentMethodState {
 
-  private subscription: Subscription;
   constructor(
     private store: Store,
     private snackBarStatus: SnackbarStatusService,
@@ -38,6 +40,27 @@ export class PaymentMethodState {
   @Selector()
   static IsLoading(state: IPaymentMethodStateModel): boolean {
     return state.loading;
+  }
+
+
+  @Selector()
+  static getPreferredPaymentMethod(state: IPaymentMethodStateModel): IPaymentMethodFireStoreModel {
+    return state.preferred;;
+  }
+
+  @Selector()
+  static getPaymentMethods(state: IPaymentMethodStateModel): IPaymentMethodFireStoreModel[] {
+    return state.records;
+  }
+
+  @Selector()
+  static getPaymentSetupError(state: IPaymentMethodStateModel): StripeError {
+    return state.cardSetupError;
+  }
+
+  @Selector()
+  static hasPaymentMethods(state: IPaymentMethodStateModel) {
+    return (state.records?.length ?? 0) > 0;
   }
 
 
@@ -101,6 +124,11 @@ export class PaymentMethodState {
     ctx.patchState({ cardSetupError })
   }
 
+  @Action(PaymentMethodClearUpSetupErrorAction)
+  onClearUpSetupError(ctx: StateContext<IPaymentMethodStateModel>) {
+    ctx.patchState({ cardSetupError: null });
+  }
+
   @Action(PaymentMethodAddAction)
   onAddPayment(ctx: StateContext<IPaymentMethodStateModel>, action: PaymentMethodAddAction) {
     const { payment_method, id } = action.request
@@ -113,35 +141,15 @@ export class PaymentMethodState {
     ctx.patchState({ preferred });
   }
 
- 
-
-  @Action(PaymentMethodUpdateAction)
-  onUpdateAction(ctx: StateContext<IPaymentMethodStateModel>, action: PaymentMethodUpdateAction) {
-    return this.store.selectOnce(AuthState.getUser).pipe(
-      mergeMap((user) => {
-        const now = Date.now();
-        const metadata = <Partial<IFireBaseEntity>>{ updatedDate: now, updatedBy: user }
-        const form = { ...action.request, ...metadata };
-        return this.schemas.update(action.request.Id, form);
-      }),
-      delay(1000),
-      tap(() => {
-        this.snackBarStatus.OpenComplete('Payment Method Updated Succesfully');
-        ctx.dispatch(new Navigate(['admin/PaymentMethod']));
-      })
+  @Action(PaymentMethodRemoveAction)
+  onRemovePaymentMethod(ctx: StateContext<IPaymentMethodStateModel>, action: PaymentMethodRemoveAction) {
+    const { id } = action.request;
+    return this.confirmationDialog.OnConfirm('Are you sure you would like to remove this payment method?').pipe(
+      mergeMap(() => this.schema.delete(id)),
+      tap(() => this.snackBarStatus.OpenComplete('Payment method removed')),
+      mergeMap(() => ctx.dispatch(new PaymentMethodLoadAllAction()))
     );
   }
-
-  @Action(PaymentMethodRemoveAction)
-  onRemove(ctx: StateContext<IPaymentMethodStateModel>, action: PaymentMethodRemoveAction) {
-    const { Id } = action.request;
-    return this.confirmationDialog.OnConfirm('Are you sure you would like to delete this Payment Method?').pipe(
-      mergeMap(() => from(this.schemas.delete(Id))),
-      tap(() => this.snackBarStatus.OpenComplete('Payment Method has been Removed')),
-    )
-  }
-
-
 
 
 

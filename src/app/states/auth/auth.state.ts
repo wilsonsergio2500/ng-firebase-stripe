@@ -9,7 +9,6 @@ import { Injectable } from '@angular/core';
 import { SnackbarStatusService } from "@customComponents/ux/snackbar-status/service/snackbar-status.service";
 import { IUserFirebaseModel } from "../users/schema/user.schema";
 import { UserCreateAction } from "../users/users.actions";
-import { StripeCustomersInitializeAction } from "../stripe/customers/stripe-customers.actions";
 import { CustomerIntializeAction } from "../stripe/customer/customer.actions";
 
 const REGISTRATION_ERROR_GENERIC = 'The User could not be registered at this moment';
@@ -76,7 +75,6 @@ export class AuthState implements NgxsOnInit {
         if (user) {
           const { uid, phoneNumber, photoURL, email, displayName } = user;
           ctx.dispatch(new AuthLoginSuccessAction({ uid, phoneNumber, photoURL, email, displayName }));
-          ctx.dispatch(new StripeCustomersInitializeAction(uid));
           ctx.dispatch(new CustomerIntializeAction({ id: uid }));
           return from(user.getIdTokenResult());
         }

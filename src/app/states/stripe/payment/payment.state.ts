@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Store, State, Selector, StateContext, Action } from '@ngxs/store';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Subscription, from, of } from 'rxjs';
-import { Navigate } from '@ngxs/router-plugin';
 import { AuthState } from '@states/auth/auth.state';
 import { IPaymentStateModel } from './payment.model';
 import { PaymentSetAsLoadingAction, PaymentSetAsDoneAction, PaymentCreateAction, PaymentInitializeAction } from './payment.actions';
-import { tap, mergeMap, delay, filter, finalize, catchError } from 'rxjs/operators';
-import { Logger } from '@appUtils/logger';
+import { mergeMap, filter, map } from 'rxjs/operators';
 import { PaymentFireStoreService } from './schema/payment.firebase';
 import { SnackbarStatusService } from '@customComponents/ux/snackbar-status/service/snackbar-status.service';
 import { ConfirmationDialogService } from '@customComponents/ux/confirmation-dialog/confirmation-dialog.service';
+import { PaymentMethodState } from '../payment-method/payment-method.state';
+import { stripeHelpers } from '../../../utils/stripe-helpers';
 
 
 @State<IPaymentStateModel>({
@@ -57,18 +55,21 @@ export class PaymentState {
     this.schema.setCustomer(id);
   }
 
-  //@Action(PaymentCreateAction)
-  //onCreate(ctx: StateContext<IPaymentStateModel>, action: PaymentCreateAction) {
-  //  return ctx.dispatch(new PaymentSetAsLoadingAction()).pipe(
-  //    mergeMap(() => this.store.selectOnce(AuthState.getUser)),
-  //    mergeMap(user => {
-  //      const metadata = { createDate: Date.now(), createdBy: user }
-  //      const payment = { ...action.request, ...metadata };
-  //      return this.schema.create(payment)
-  //    }),
-  //    mergeMap(() => ctx.dispatch(new PaymentSetAsDoneAction()))
-  //  );
-  //}
+  @Action(PaymentCreateAction)
+  onCreate(ctx: StateContext<IPaymentStateModel>, action: PaymentCreateAction) {
+    const { currency, amount } = action.request;
+    return this.store.selectOnce(PaymentMethodState.getPreferredPaymentMethod).pipe(
+      filter(pm => !!pm),
+      mergeMap(payment_method =>
+        this.store.selectOnce(AuthState.getUser).pipe(
+          map(u => ({ payment_method, createDate: Date.now(), createBy:u }))
+        )
+      ),
+      mergeMap(meta => {
+        return this.schema.merge({ ...meta, currency, amount: stripeHelpers.formatAmount(amount, currency) });
+      })
+    )
+  }
 
 
 
