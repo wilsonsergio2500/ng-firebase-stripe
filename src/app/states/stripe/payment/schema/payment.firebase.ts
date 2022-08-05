@@ -1,7 +1,10 @@
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Injectable } from '@angular/core';
 import { FireStoreSchemaService } from '../../../../modules/firebase-state-helper/services/firestore-schema.service';
 import { IPaymentFireStoreModel } from './payment.schema';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class PaymentFireStoreService extends FireStoreSchemaService<IPaymentFireStoreModel>{
 
   private _customerId = '';
