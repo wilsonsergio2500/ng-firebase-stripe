@@ -10,7 +10,6 @@ export abstract class FireStoreSchemaService<T>{
 
 
   protected abstract basePath: string;
-  protected abstract indexField: 'id';
   constructor(protected firestore: AngularFirestore,
     @Optional() @Inject(FIREBASE_STATE_CONFIG) private config: INgxsStateHelperModuleConfig) { }
 
@@ -26,7 +25,7 @@ export abstract class FireStoreSchemaService<T>{
     return this.config?.loggerOn ?? false;
   }
 
-  protected log<TLog>(title: string, r: TLog) {
+  protected log<T>(title: string, r: T[] | Partial<T>[]) {
     console.groupCollapsed(title);
     console.table(r);
     console.groupEnd();
@@ -36,7 +35,7 @@ export abstract class FireStoreSchemaService<T>{
     return this.firestore.doc<T>(`${this.basePath}/${id}`).valueChanges().pipe(
       tap(r => {
         if (this.loggerOn) {
-          this.log(`Firestore Streaming [${this.basePath}] [doc$] ${id}`, r);
+          this.log(`Firestore Streaming [${this.basePath}] [doc$] ${id}`, [r]);
         }
       }),
     );
@@ -48,7 +47,7 @@ export abstract class FireStoreSchemaService<T>{
         if (snapshot.exists) {
           const r = snapshot.data();
           if (this.loggerOn) {
-            this.log(`Firestore Streaming [${this.basePath}] [docOnce$] ${id}`, r);
+            this.log(`Firestore Streaming [${this.basePath}] [docOnce$] ${id}`, [r]);
           }
           return r;
         }
@@ -74,7 +73,7 @@ export abstract class FireStoreSchemaService<T>{
           const snapshotDocs = snapshot.docs;
           const r = snapshotDocs.map((snapshotItem) => snapshotItem.data());
           if (!this.loggerOn) {
-            this.log(`Firestore Streaming [${this.basePath}] [collectionOnce$]`, r);
+            this.log(`Firestore Streaming [${this.basePath}] [collectionOnce$]`, [r]);
           }
           return r;
         })
@@ -86,7 +85,7 @@ export abstract class FireStoreSchemaService<T>{
     return from(this.collection.doc(id).set(payload)).pipe(
       tap(() => {
         if (this.loggerOn) {
-          this.log(`Firestore Streaming [${this.basePath}] [create] [${id}]`, payload);
+          this.log(`Firestore Streaming [${this.basePath}] [create] [${id}]`, [{ ...value, id }]);
         }
       })
     )
@@ -97,7 +96,7 @@ export abstract class FireStoreSchemaService<T>{
     return from(this.firestore.doc<T>(`${this.basePath}/${docId}`).update({ ...value })).pipe(
       tap(() => {
         if (this.loggerOn) {
-          this.log(`Firestore Service [${this.basePath}] [update] [${docId}]`, value)
+          this.log(`Firestore Service [${this.basePath}] [update] [${docId}]`, [value])
         }
       })
     )
@@ -118,7 +117,7 @@ export abstract class FireStoreSchemaService<T>{
     return from(this.firestore.doc<T | Partial<T>>(`${this.basePath}/${docId}`).set({ ...value }, setOptions)).pipe(
       tap(() => {
         if (this.loggerOn) {
-          this.log(`Firestore Service [${this.basePath}] [update] [${docId}]`, value)
+          this.log(`Firestore Service [${this.basePath}] [update] [${docId}]`, [value])
         }
       })
     )

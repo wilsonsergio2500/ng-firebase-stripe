@@ -10,6 +10,7 @@ import { SnackbarStatusService } from "@customComponents/ux/snackbar-status/serv
 import { IUserFirebaseModel } from "../users/schema/user.schema";
 import { UserCreateAction } from "../users/users.actions";
 import { StripeCustomersInitializeAction } from "../stripe/customers/stripe-customers.actions";
+import { CustomerIntializeAction } from "../stripe/customer/customer.actions";
 
 const REGISTRATION_ERROR_GENERIC = 'The User could not be registered at this moment';
 
@@ -76,6 +77,7 @@ export class AuthState implements NgxsOnInit {
           const { uid, phoneNumber, photoURL, email, displayName } = user;
           ctx.dispatch(new AuthLoginSuccessAction({ uid, phoneNumber, photoURL, email, displayName }));
           ctx.dispatch(new StripeCustomersInitializeAction(uid));
+          ctx.dispatch(new CustomerIntializeAction({ id: uid }));
           return from(user.getIdTokenResult());
         }
         return EMPTY;

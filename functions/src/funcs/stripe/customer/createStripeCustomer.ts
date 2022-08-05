@@ -10,6 +10,7 @@ export const createStripeCustomer = functions.auth.user().onCreate(async (user) 
   await fireStoreDb.collection('stripe_customers').doc(user.uid).set({
     customer_id: customer.id,
     setup_secret: intent.client_secret,
+    id: user.uid
   });
   return;
 });
