@@ -57,18 +57,18 @@ export class PaymentState {
     this.schema.setCustomer(id);
   }
 
-  @Action(PaymentCreateAction)
-  onCreate(ctx: StateContext<IPaymentStateModel>, action: PaymentCreateAction) {
-    return ctx.dispatch(new PaymentSetAsLoadingAction()).pipe(
-      mergeMap(() => this.store.selectOnce(AuthState.getUser)),
-      mergeMap(user => {
-        const metadata = { createDate: Date.now(), createdBy: user }
-        const payment = { ...action.request, ...metadata };
-        return this.schema.create(payment)
-      }),
-      mergeMap(() => ctx.dispatch(new PaymentSetAsDoneAction()))
-    );
-  }
+  //@Action(PaymentCreateAction)
+  //onCreate(ctx: StateContext<IPaymentStateModel>, action: PaymentCreateAction) {
+  //  return ctx.dispatch(new PaymentSetAsLoadingAction()).pipe(
+  //    mergeMap(() => this.store.selectOnce(AuthState.getUser)),
+  //    mergeMap(user => {
+  //      const metadata = { createDate: Date.now(), createdBy: user }
+  //      const payment = { ...action.request, ...metadata };
+  //      return this.schema.create(payment)
+  //    }),
+  //    mergeMap(() => ctx.dispatch(new PaymentSetAsDoneAction()))
+  //  );
+  //}
 
 
 

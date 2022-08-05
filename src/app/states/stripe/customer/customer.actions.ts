@@ -1,5 +1,5 @@
+import { ByIdType } from "./customer.model";
 
-export type ByIdType = { id: string };
 
 export class CustomerIntializeAction {
   static readonly type = '[Customer] Initialize';
