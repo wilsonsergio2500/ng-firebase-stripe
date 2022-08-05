@@ -1,5 +1,5 @@
 import { ByIdType } from "../customer/customer.model";
-import { PreferredPaymentType, SetupPaymentErrorType, SetupPaymentIntentType, SetupPaymentType, StripeCustomerType } from "./payment-method.model";
+import { PreferredPaymentType, SetupPaymentErrorType, SetupPaymentIntentType, SetupPaymentType } from "./payment-method.model";
 
 
 export class PaymentMethodSetAsLoadingAction {
@@ -12,7 +12,7 @@ export class PaymentMethodSetAsDoneAction {
 
 export class PaymentMethodInitializeAction {
   static readonly type = '[Payment Method] Initialize';
-  constructor(public request: StripeCustomerType) { }
+  constructor(public request: ByIdType) { }
 }
 
 export class PaymentMethodLoadAllAction {

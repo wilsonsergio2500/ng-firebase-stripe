@@ -5,37 +5,44 @@ import { CustomerSetAsLoadingAction, CustomerSetAsDoneAction, CustomerIntializeA
 import { tap, mergeMap } from 'rxjs/operators';
 import { CustomerFireStoreService } from './schema/customer.firebase';
 import { PaymentInitializeAction } from '../payment/payment.actions';
+import { ICustomerFireStoreModel } from './schema/customer.schema';
+import { PaymentMethodInitializeAction } from '../payment-method/payment-method.actions';
 
 
 @State<ICustomerStateModel>({
-    name: 'customerState',
-    defaults: <ICustomerStateModel>{
-        loading: false,
-        currentStripeCustomer: null,
-    }
+  name: 'customerState',
+  defaults: <ICustomerStateModel>{
+    loading: false,
+    currentStripeCustomer: null,
+  }
 })
 @Injectable()
 export class CustomerState {
 
-    constructor(
-      private schema: CustomerFireStoreService
-    ){}
+  constructor(
+    private schema: CustomerFireStoreService
+  ) { }
 
   @Selector()
-  static IsLoading(state: ICustomerStateModel) : boolean {
+  static IsLoading(state: ICustomerStateModel): boolean {
     return state.loading;
   }
 
+  @Selector()
+  static getCurrentCustomer(state: ICustomerStateModel): ICustomerFireStoreModel {
+    return state.currentStripeCustomer
+  }
+
   @Action(CustomerSetAsDoneAction)
- onDone(ctx: StateContext<ICustomerStateModel>) {
+  onDone(ctx: StateContext<ICustomerStateModel>) {
     ctx.patchState({
-        loading: false
+      loading: false
     });
   }
   @Action(CustomerSetAsLoadingAction)
   onLoading(ctx: StateContext<ICustomerStateModel>) {
     ctx.patchState({
-        loading: true
+      loading: true
     });
   }
 
@@ -45,11 +52,11 @@ export class CustomerState {
     ctx.dispatch(new CustomerSetAsLoadingAction())
     return this.schema.docOnce$(id).pipe(
       tap(currentStripeCustomer => {
-        console.log(currentStripeCustomer);
         ctx.patchState({ currentStripeCustomer })
       }),
       mergeMap(() => ctx.dispatch([
-        new PaymentInitializeAction({id}),
+        new PaymentInitializeAction({ id }),
+        new PaymentMethodInitializeAction({ id }),
         new CustomerSetAsDoneAction()
       ]))
     )

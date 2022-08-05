@@ -73,7 +73,7 @@ export abstract class FireStoreSchemaService<T>{
           const snapshotDocs = snapshot.docs;
           const r = snapshotDocs.map((snapshotItem) => snapshotItem.data());
           if (!this.loggerOn) {
-            this.log(`Firestore Streaming [${this.basePath}] [collectionOnce$]`, [r]);
+            this.log(`Firestore Streaming [${this.basePath}] [collectionOnce$]`, r);
           }
           return r;
         })
