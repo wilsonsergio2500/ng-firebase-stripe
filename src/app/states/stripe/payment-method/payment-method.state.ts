@@ -113,7 +113,6 @@ export class PaymentMethodState {
     return this.store.selectOnce(CustomerState.getCurrentCustomer).pipe(
       mergeMap(currentStripeUser => this.stripeService.confirmCardSetup(currentStripeUser.setup_secret, cardSetup)),
       mergeMap(({ setupIntent, error }) => {
-        console.log(setupIntent, error);
         return iif(() => !!error,
           ctx.dispatch(new PaymentMethodSetupOnErrorAction(error)),
           ctx.dispatch(new PaymentMethodAddAction(setupIntent))
@@ -137,7 +136,6 @@ export class PaymentMethodState {
 
   @Action(PaymentMethodAddAction)
   onAddPayment(ctx: StateContext<IPaymentMethodStateModel>, action: PaymentMethodAddAction) {
-    console.log(action.request);
     const { payment_method, id } = action.request
     return this.schema.merge({ paymentMethodId: payment_method }, id).pipe(
       mergeMap(() => ctx.dispatch(new PaymentMethodSetAsDoneAction())),
