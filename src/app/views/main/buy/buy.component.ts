@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { PaymentMethod, StripeCardElementOptions, StripeElementsOptions, StripeError } from '@stripe/stripe-js';
+import { Appearance, PaymentMethod, StripeCardElementChangeEvent, StripeCardElementOptions, StripeElementsOptions, StripeError } from '@stripe/stripe-js';
 import { StripeCardComponent } from 'ngx-stripe';
 import { FormTypeBuilder, NgTypeFormGroup } from 'reactive-forms-typed';
 import { IPaymentForm } from './payment.form';
@@ -20,15 +20,15 @@ import { currencyType } from '../../../modules/store/components/purchase/purchas
 })
 export class BuyComponent implements OnInit {
 
-  @ViewChild(StripeCardComponent) card: StripeCardComponent;
+  hasValidCard = false;
   formGroup: NgTypeFormGroup<IPaymentForm>;
+  @ViewChild(StripeCardComponent) card: StripeCardComponent;
+  
 
   @Select(PaymentMethodState.getPreferredPaymentMethod) preferredPaymentMethod$: Observable<PaymentMethod>;
   @Select(PaymentMethodState.getPaymentMethods) paymentMethods$: Observable<IPaymentMethodFireStoreModel>;
   @Select(PaymentMethodState.getPaymentSetupError) cardError$: Observable<StripeError>;
   @Select(PaymentMethodState.IsLoading) addingCard$: Observable<boolean>;
-
-
   @Select(CustomerState.IsLoading) loading$: Observable<boolean>;
 
 
@@ -60,9 +60,25 @@ export class BuyComponent implements OnInit {
     },
   };
 
+  appearance: Appearance = {
+    theme: 'stripe',
+    labels: 'floating',
+    variables: {
+      colorPrimary: '#673ab7',
+    },
+  };
+
   elementsOptions: StripeElementsOptions = {
     locale: 'en',
   };
+
+  get hasFormValid() {
+    return this.formGroup.valid && this.hasValidCard;
+  }
+
+  onStripeCardChange($event: StripeCardElementChangeEvent) {
+    this.hasValidCard = (!!$event.error || !$event.complete) ? false : true;
+  }
 
   submit() {
     this.store.dispatch(new PaymentMethodSetupAction({ card: this.card.element, name: this.formGroup.value.cardHolderName }))

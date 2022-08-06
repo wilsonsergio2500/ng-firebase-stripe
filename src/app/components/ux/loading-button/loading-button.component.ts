@@ -41,10 +41,8 @@ const materialButtonAttrs = [
 
 export class LoadingButton implements OnInit {
 
-    @Input('IsBusy')
-    public IsWorking: boolean;
-    @Input()
-    disabled: boolean;
+    @Input('IsBusy') public IsWorking: boolean;
+    @Input() disabled: boolean;
 
     class: string = '';
     buttonType: string = 'button';

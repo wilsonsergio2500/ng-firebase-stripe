@@ -11,11 +11,11 @@
         </mat-form-field>
 
 
-        <ngx-stripe-card [options]="cardOptions"
+        <ngx-stripe-card [options]="cardOptions" (change)="onStripeCardChange($event)"
                          [elementsOptions]="elementsOptions"></ngx-stripe-card>
 
 
-        <loading-button [IsBusy]="addingCard$ | async" mat-raised-button type="submit">
+        <loading-button [IsBusy]="addingCard$ | async" mat-raised-button type="submit" [disabled]="!hasFormValid">
           <loading-button-ready>
             Add Card
           </loading-button-ready>
