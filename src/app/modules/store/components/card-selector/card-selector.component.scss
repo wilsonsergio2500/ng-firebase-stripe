@@ -6,36 +6,18 @@
   ::ng-deep {
     .card-selector-remove-action {
       padding-top: 8px;
-      padding-left:8px;
+      padding-left: 8px;
     }
   }
 
-  .card-selector-container {
-    display: flex;
-
-    .mat-list-item {
+  ::ng-deep {
+    .card-selector-label {
       display: flex;
-      width: 100%;
-    }
-
-    ::ng-deep {
-      .card-selector-remove-action {
-        padding-top: 8px;
+      align-items: center;
+      .card-selector-label-detail{
+          padding:10px;
       }
-      /*      .mat-list-item-content {
-        display: flex;
-        cursor: pointer;
-        flex-grow: 1;
-      }
-
-      .card-selector-action {
-        flex-grow: 1;
-        display: flex;
-      }
-
-      .card-selector-label {
-        display: flex;
-      }*/
     }
   }
+  
 }
