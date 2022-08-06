@@ -12,6 +12,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CustomComponentsModule } from '@customComponents/customComponents.module';
 import { NgxStripeModule } from 'ngx-stripe'
 import { StoreCustomComponentsModule } from '../store/store-custom-components.module';
+import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard-icons.module';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { StoreCustomComponentsModule } from '../store/store-custom-components.mo
     FlexLayoutModule,
     CustomComponentsModule,
     NgxStripeModule,
-    StoreCustomComponentsModule
+    StoreCustomComponentsModule,
+    MatCreditcardIconsModule
   ],
   exports: [
     RouterModule,
@@ -40,7 +42,8 @@ import { StoreCustomComponentsModule } from '../store/store-custom-components.mo
     FlexLayoutModule,
     CustomComponentsModule,
     NgxStripeModule,
-    StoreCustomComponentsModule
+    StoreCustomComponentsModule,
+    MatCreditcardIconsModule
   ]
 })
 export class SharedModule {
