@@ -15,4 +15,4 @@ import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard
   declarations: [...getComponents()],
   exports: [...getComponents()]
 })
-export class StoreCustomComponentsModule { }
+export class MatCommerceComponentsModule { }

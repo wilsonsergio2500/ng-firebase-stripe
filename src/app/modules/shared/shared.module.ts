@@ -7,11 +7,10 @@ import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MaterialComponentsModule } from '@material/material.module';
 import { ReactiveFormsTypedModule } from 'reactive-forms-typed';
-import { FirebaseModule } from '../firebase/firebase.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CustomComponentsModule } from '@customComponents/customComponents.module';
 import { NgxStripeModule } from 'ngx-stripe'
-import { StoreCustomComponentsModule } from '../store/store-custom-components.module';
+import { MatCommerceComponentsModule } from '@materialCommerce/mat-commerce-components.module';
 import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard-icons.module';
 
 @NgModule({
@@ -25,11 +24,10 @@ import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard
     FormsModule,
     ScrollingModule,
     ReactiveFormsTypedModule,
-    FirebaseModule,
     FlexLayoutModule,
     CustomComponentsModule,
     NgxStripeModule,
-    StoreCustomComponentsModule,
+    MatCommerceComponentsModule,
     MatCreditcardIconsModule
   ],
   exports: [
@@ -38,11 +36,10 @@ import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard
     ReactiveFormsModule,
     ScrollingModule,
     ReactiveFormsTypedModule,
-    FirebaseModule,
     FlexLayoutModule,
     CustomComponentsModule,
     NgxStripeModule,
-    StoreCustomComponentsModule,
+    MatCommerceComponentsModule,
     MatCreditcardIconsModule
   ]
 })

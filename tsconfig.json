@@ -20,6 +20,7 @@
       "@states/*": [ "src/app/states/*" ],
       "@shared/*": [ "src/app/modules/shared/*" ],
       "@material/*": [ "src/app/modules/material/*" ],
+      "@materialCommerce/*": [ "src/app/modules/commerce/*" ],
       "@customComponents/*": [ "src/app/components/*" ],
       "@firebase/*": [ "src/app/modules/firebase/*" ],
       "@appUtils/*": [ "src/app/utils/*" ]

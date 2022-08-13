@@ -6,7 +6,7 @@ import { FIREBASE_STATE_CONFIG, INgxsStateHelperModuleConfig } from "../tokens/f
 import * as firebase from 'firebase'
 
 @Injectable()
-export abstract class FireStoreSchemaService<T>{
+export abstract class FirestoreService<T>{
 
 
   protected abstract basePath: string;

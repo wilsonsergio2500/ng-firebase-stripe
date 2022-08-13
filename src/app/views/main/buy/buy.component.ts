@@ -9,9 +9,9 @@ import { Observable } from 'rxjs';
 import { PaymentMethodState } from '@states/stripe/payment-method/payment-method.state';
 import { CustomerState } from '@states/stripe/customer/customer.state';
 import { IPaymentMethodFireStoreModel } from '@states/stripe/payment-method/schema/payment-method.schema';
-import { PaymentMethodRemoveAction, PaymentMethodSetPreferredAction, PaymentMethodSetupAction } from '../../../states/stripe/payment-method/payment-method.actions';
+import { PaymentMethodRemoveAction, PaymentMethodSetPreferredAction, PaymentMethodSetupAction } from '@states/stripe/payment-method/payment-method.actions';
 import { PaymentCreateAction } from '@states/stripe/payment/payment.actions';
-import { currencyType } from '../../../modules/store/components/purchase/purchase.component';
+import { currencyType } from '@states/stripe/payment/schema/payment.schema';
 
 @Component({
   selector: 'buy',
