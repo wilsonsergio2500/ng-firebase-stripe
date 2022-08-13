@@ -1,4 +1,4 @@
-import { IFireBaseEntity } from "@firebase/schema/base-schema";
+import { IFireBaseEntity } from "@firebaseNgxs/schema/base-schema";
 
 export interface IUserFirebaseModel extends IFireBaseEntity {
   name?: string;

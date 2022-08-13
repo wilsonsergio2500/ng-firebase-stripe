@@ -12,6 +12,8 @@ import { CustomComponentsModule } from '@customComponents/customComponents.modul
 import { NgxStripeModule } from 'ngx-stripe'
 import { MatCommerceComponentsModule } from '@materialCommerce/mat-commerce-components.module';
 import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard-icons.module';
+import { NgxsFirebaseStateHelperModule } from '@firebaseNgxs/firebase-state-helper.module';
+import { FirebaseModule } from '../firebase/firebase.module';
 
 @NgModule({
   imports: [
@@ -24,11 +26,13 @@ import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard
     FormsModule,
     ScrollingModule,
     ReactiveFormsTypedModule,
+    FirebaseModule,
     FlexLayoutModule,
     CustomComponentsModule,
     NgxStripeModule,
     MatCommerceComponentsModule,
-    MatCreditcardIconsModule
+    MatCreditcardIconsModule,
+    NgxsFirebaseStateHelperModule
   ],
   exports: [
     RouterModule,
@@ -36,6 +40,7 @@ import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard
     ReactiveFormsModule,
     ScrollingModule,
     ReactiveFormsTypedModule,
+    FirebaseModule,
     FlexLayoutModule,
     CustomComponentsModule,
     NgxStripeModule,

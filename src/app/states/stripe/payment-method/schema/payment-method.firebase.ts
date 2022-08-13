@@ -1,6 +1,6 @@
 import { IPaymentMethodFireStoreModel } from './payment-method.schema';
 import { Injectable } from '@angular/core';
-import { FirestoreService } from '@firebase/services/firestore.service';
+import { FirestoreService } from '@firebaseNgxs/services/firestore.service';
 
 @Injectable({ providedIn: "root"})
 export class PaymentMethodFireStoreService extends FirestoreService<IPaymentMethodFireStoreModel>{

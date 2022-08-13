@@ -4,7 +4,7 @@ import { tap, mergeMap, delay, catchError } from 'rxjs/operators';
 import { from, Subscription, of } from 'rxjs';
 import { UserFireStoreService } from './schema/user.firestore';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { FirebasePaginationStateModel } from '@firebase/paginations/firebase-pagination';
+import { FirebasePaginationStateModel } from '@firebaseNgxs/paginations/firebase-pagination';
 import { UserSetAsDoneAction, UserSetAsLoadingAction, UserCreateAction, UserLoadItemsAction, UserSetElementsAction, UserGetPageAction, UserGetNextPageAction, UserGetPreviousPageAction } from './users.actions';
 import { SnackbarStatusService } from "@customComponents/ux/snackbar-status/service/snackbar-status.service";
 import { Injectable } from '@angular/core';

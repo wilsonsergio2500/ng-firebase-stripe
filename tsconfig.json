@@ -23,6 +23,7 @@
       "@materialCommerce/*": [ "src/app/modules/commerce/*" ],
       "@customComponents/*": [ "src/app/components/*" ],
       "@firebase/*": [ "src/app/modules/firebase/*" ],
+      "@firebaseNgxs/*": [ "src/app/modules/firebase-ngxs/*" ],
       "@appUtils/*": [ "src/app/utils/*" ]
     }
   },

@@ -1,4 +1,4 @@
-import { IFirebasePaginationState } from "@firebase/paginations/firebase-pagination";
+import { IFirebasePaginationState } from "@firebaseNgxs/paginations/firebase-pagination";
 import { IUserFirebaseModel } from "./schema/user.schema";
 
 export interface IUsersStateModel {

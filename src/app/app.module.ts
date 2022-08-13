@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgxsFirebaseStateHelperModule } from '@firebase/firebase-state-helper.module';
+import { NgxsFirebaseStateHelperModule } from '@firebaseNgxs/firebase-state-helper.module';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 
