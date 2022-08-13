@@ -32,7 +32,7 @@ import { RegisterComponent } from './views/register/register.component';
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production}),
     MaterialComponentsModule,
     NgxStripeModule.forRoot(environment.stripe.key),
-    NgxsFirebaseStateHelperModule.forRoot({ loggerOn: environment.production })
+    NgxsFirebaseStateHelperModule.forRoot({ loggerOn: !environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

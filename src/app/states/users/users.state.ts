@@ -25,7 +25,6 @@ export class UsersState {
 
   private GetUserSubscription: Subscription;
   constructor(
-    angularFireStore: AngularFirestore,
     private snackBarStatus: SnackbarStatusService,
     private schema: UserFireStoreService
   ) {
