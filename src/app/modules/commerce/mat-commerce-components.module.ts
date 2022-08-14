@@ -4,6 +4,7 @@ import { getComponents } from './components/elements';
 import { MaterialComponentsModule } from '@material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard-icons.module';
+import { getProviders } from './services/elements';
 
 @NgModule({
   imports: [
@@ -13,6 +14,9 @@ import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard
     MatCreditcardIconsModule
   ],
   declarations: [...getComponents()],
+  providers: [
+    ...getProviders()
+  ],
   exports: [...getComponents()]
 })
 export class MatCommerceComponentsModule { }

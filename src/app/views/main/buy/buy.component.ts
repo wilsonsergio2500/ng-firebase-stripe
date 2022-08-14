@@ -9,9 +9,11 @@ import { Observable } from 'rxjs';
 import { PaymentMethodState } from '@states/stripe/payment-method/payment-method.state';
 import { CustomerState } from '@states/stripe/customer/customer.state';
 import { IPaymentMethodFireStoreModel } from '@states/stripe/payment-method/schema/payment-method.schema';
-import { PaymentMethodRemoveAction, PaymentMethodSetPreferredAction, PaymentMethodSetupAction } from '@states/stripe/payment-method/payment-method.actions';
+import { PaymentMethodRemoveAction, PaymentMethodSetupAction } from '@states/stripe/payment-method/payment-method.actions';
 import { PaymentCreateAction } from '@states/stripe/payment/payment.actions';
 import { currencyType } from '@states/stripe/payment/schema/payment.schema';
+import { MatCommercePayMethodsDialogService } from '@materialCommerce/services/pay-methods-dialog/mat-commerce-pay-methods-dialog.service';
+import { CustomerSetPreferredPayment } from '@states/stripe/customer/customer.actions';
 
 @Component({
   selector: 'buy',
@@ -25,7 +27,7 @@ export class BuyComponent implements OnInit {
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
   
 
-  @Select(PaymentMethodState.getPreferredPaymentMethod) preferredPaymentMethod$: Observable<PaymentMethod>;
+  @Select(CustomerState.getPreferredPaymentMethod) preferredPaymentMethod$: Observable<PaymentMethod>;
   @Select(PaymentMethodState.getPaymentMethods) paymentMethods$: Observable<IPaymentMethodFireStoreModel>;
   @Select(PaymentMethodState.getPaymentSetupError) cardError$: Observable<StripeError>;
   @Select(PaymentMethodState.IsLoading) addingCard$: Observable<boolean>;
@@ -36,7 +38,8 @@ export class BuyComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private formTypeBuilder: FormTypeBuilder
+    private formTypeBuilder: FormTypeBuilder,
+    private paymentSelectionService: MatCommercePayMethodsDialogService
   ) { }
 
   ngOnInit() {
@@ -89,12 +92,16 @@ export class BuyComponent implements OnInit {
   }
 
   onSelectPayment(pm: IPaymentMethodFireStoreModel) {
-    this.store.dispatch(new PaymentMethodSetPreferredAction(pm));
+    this.store.dispatch(new CustomerSetPreferredPayment(pm));
   }
 
   onPurchase(pd: { name: string, currency: string, price: number }) {
     console.log(pd);
     this.store.dispatch(new PaymentCreateAction({ currency: pd.currency as currencyType, amount: pd.price}))
+  }
+
+  pickPrefferedPayment() {
+    this.paymentSelectionService.OnOpen().subscribe();
   }
 
 }

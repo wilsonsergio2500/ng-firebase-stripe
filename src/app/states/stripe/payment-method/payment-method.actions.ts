@@ -38,10 +38,10 @@ export class PaymentMethodAddAction {
   constructor(public request: SetupPaymentIntentType) { }
 }
 
-export class PaymentMethodSetPreferredAction {
-  static readonly type = '[Payment Method] Set Preferred';
-  constructor(public request: PreferredPaymentType) { }
-}
+//export class PaymentMethodSetPreferredAction {
+//  static readonly type = '[Payment Method] Set Preferred';
+//  constructor(public request: PreferredPaymentType) { }
+//}
 
 export class PaymentMethodRemoveAction {
   static readonly type = '[Payment Method] Remove';

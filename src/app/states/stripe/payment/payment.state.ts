@@ -7,8 +7,8 @@ import { mergeMap, filter, map } from 'rxjs/operators';
 import { PaymentFireStoreService } from './schema/payment.firebase';
 import { SnackbarStatusService } from '@customComponents/ux/snackbar-status/service/snackbar-status.service';
 import { ConfirmationDialogService } from '@customComponents/ux/confirmation-dialog/confirmation-dialog.service';
-import { PaymentMethodState } from '../payment-method/payment-method.state';
 import { stripeHelpers } from '../../../utils/stripe-helpers';
+import { CustomerState } from '../customer/customer.state';
 
 
 @State<IPaymentStateModel>({
@@ -58,16 +58,14 @@ export class PaymentState {
   @Action(PaymentCreateAction)
   onCreate(ctx: StateContext<IPaymentStateModel>, action: PaymentCreateAction) {
     const { currency, amount } = action.request;
-    return this.store.selectOnce(PaymentMethodState.getPreferredPaymentMethod).pipe(
+    return this.store.selectOnce(CustomerState.getPreferredPaymentMethod).pipe(
       filter(pm => !!pm),
       mergeMap(payment_method =>
         this.store.selectOnce(AuthState.getUser).pipe(
-          map(u => ({ payment_method, createDate: Date.now(), createBy:u }))
+          map(u => ({ payment_method : payment_method.id, createDate: Date.now(), createBy:u }))
         )
       ),
-      mergeMap(meta => {
-        return this.schema.merge({ ...meta, currency, amount: stripeHelpers.formatAmount(amount, currency) });
-      })
+      mergeMap(meta => this.schema.create({ ...meta, currency, amount: stripeHelpers.formatAmount(amount, currency) }) )
     )
   }
 

@@ -4,7 +4,6 @@ import { IPaymentMethodFireStoreModel } from "./schema/payment-method.schema";
 export interface IPaymentMethodStateModel {
   loading: boolean;
   records: IPaymentMethodFireStoreModel[],
-  preferred: IPaymentMethodFireStoreModel
   cardSetupError: StripeError,
 }
 

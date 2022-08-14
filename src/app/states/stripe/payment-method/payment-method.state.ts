@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Store, State, Selector, StateContext, Action } from '@ngxs/store';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Subscription, from, of, iif } from 'rxjs';
-import { Navigate } from '@ngxs/router-plugin';
-import { AuthState } from '@states/auth/auth.state';
 import { IPaymentMethodStateModel } from './payment-method.model';
-import { PaymentMethodSetAsLoadingAction, PaymentMethodSetAsDoneAction, PaymentMethodRemoveAction, PaymentMethodInitializeAction, PaymentMethodLoadAllAction, PaymentMethodSetupAction, PaymentMethodSetupOnErrorAction, PaymentMethodAddAction, PaymentMethodSetPreferredAction, PaymentMethodClearUpSetupErrorAction } from './payment-method.actions';
-import { tap, mergeMap, delay, filter, finalize, catchError, map } from 'rxjs/operators';
+import { PaymentMethodSetAsLoadingAction, PaymentMethodSetAsDoneAction, PaymentMethodRemoveAction, PaymentMethodInitializeAction, PaymentMethodLoadAllAction, PaymentMethodSetupAction, PaymentMethodSetupOnErrorAction, PaymentMethodAddAction, PaymentMethodClearUpSetupErrorAction } from './payment-method.actions';
+import { tap, mergeMap, filter, map } from 'rxjs/operators';
 import { StripeService } from 'ngx-stripe';
 import { ConfirmCardSetupData, StripeError } from '@stripe/stripe-js';
 import { PaymentMethodFireStoreService } from './schema/payment-method.firebase';
@@ -14,6 +10,7 @@ import { SnackbarStatusService } from '@customComponents/ux/snackbar-status/serv
 import { ConfirmationDialogService } from '@customComponents/ux/confirmation-dialog/confirmation-dialog.service';
 import { IPaymentMethodFireStoreModel } from './schema/payment-method.schema';
 import { CustomerState } from '../customer/customer.state';
+import { iif } from 'rxjs';
 
 
 @State<IPaymentMethodStateModel>({
@@ -21,7 +18,6 @@ import { CustomerState } from '../customer/customer.state';
   defaults: <IPaymentMethodStateModel>{
     loading: false,
     records: [],
-    preferred: null,
     cardSetupError: null,
   }
 })
@@ -40,12 +36,6 @@ export class PaymentMethodState {
   @Selector()
   static IsLoading(state: IPaymentMethodStateModel): boolean {
     return state.loading;
-  }
-
-
-  @Selector()
-  static getPreferredPaymentMethod(state: IPaymentMethodStateModel): IPaymentMethodFireStoreModel {
-    return state.preferred;;
   }
 
   @Selector()
@@ -141,12 +131,6 @@ export class PaymentMethodState {
       mergeMap(() => ctx.dispatch(new PaymentMethodSetAsDoneAction())),
       tap(() => this.snackBarStatus.OpenComplete('Payment Method has been added'))
     );
-  }
-
-  @Action(PaymentMethodSetPreferredAction)
-  onSetPreferredPaymentMethod(ctx: StateContext<IPaymentMethodStateModel>, action: PaymentMethodSetPreferredAction) {
-    const { request: preferred } = action;
-    ctx.patchState({ preferred });
   }
 
   @Action(PaymentMethodRemoveAction)
