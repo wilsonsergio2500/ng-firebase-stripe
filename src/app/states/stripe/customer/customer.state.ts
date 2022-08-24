@@ -62,6 +62,7 @@ export class CustomerState {
         ctx.patchState({ currentStripeCustomer })
       }),
       mergeMap(() => ctx.dispatch([
+        new CustomerInitializePreferredPayment(),
         new PaymentInitializeAction({ id }),
         new PaymentMethodInitializeAction({ id }),
         new CustomerSetAsDoneAction()

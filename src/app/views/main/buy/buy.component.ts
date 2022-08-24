@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Appearance, PaymentMethod, StripeCardElementChangeEvent, StripeCardElementOptions, StripeElementsOptions, StripeError } from '@stripe/stripe-js';
 import { StripeCardComponent } from 'ngx-stripe';
 import { FormTypeBuilder, NgTypeFormGroup } from 'reactive-forms-typed';
 import { IPaymentForm } from './payment.form';
-import { Observable } from 'rxjs';
+import { merge, Observable, Subscription, zip } from 'rxjs';
 import { PaymentMethodState } from '@states/stripe/payment-method/payment-method.state';
 import { CustomerState } from '@states/stripe/customer/customer.state';
 import { IPaymentMethodFireStoreModel } from '@states/stripe/payment-method/schema/payment-method.schema';
@@ -14,13 +14,14 @@ import { PaymentCreateAction } from '@states/stripe/payment/payment.actions';
 import { currencyType } from '@states/stripe/payment/schema/payment.schema';
 import { MatCommercePayMethodsDialogService } from '@materialCommerce/services/pay-methods-dialog/mat-commerce-pay-methods-dialog.service';
 import { CustomerSetPreferredPayment } from '@states/stripe/customer/customer.actions';
+import { filter, mergeMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'buy',
   templateUrl: 'buy.component.html',
   styleUrls: [`buy.component.scss`]
 })
-export class BuyComponent implements OnInit {
+export class BuyComponent implements OnInit, OnDestroy {
 
   hasValidCard = false;
   formGroup: NgTypeFormGroup<IPaymentForm>;
@@ -28,13 +29,14 @@ export class BuyComponent implements OnInit {
   
 
   @Select(CustomerState.getPreferredPaymentMethod) preferredPaymentMethod$: Observable<PaymentMethod>;
-  @Select(PaymentMethodState.getPaymentMethods) paymentMethods$: Observable<IPaymentMethodFireStoreModel>;
+  @Select(PaymentMethodState.getPaymentMethods) paymentMethods$: Observable<IPaymentMethodFireStoreModel[]>;
   @Select(PaymentMethodState.getPaymentSetupError) cardError$: Observable<StripeError>;
   @Select(PaymentMethodState.IsLoading) addingCard$: Observable<boolean>;
   @Select(CustomerState.IsLoading) loading$: Observable<boolean>;
 
 
-  productDetail = { name: 'A Great Product', currency : 'usd', price: 100 }
+  productDetail = { name: 'A Great Product', currency: 'usd', price: 100 }
+  subs$: Subscription[] = [];
 
   constructor(
     private store: Store,
@@ -101,7 +103,21 @@ export class BuyComponent implements OnInit {
   }
 
   pickPrefferedPayment() {
-    this.paymentSelectionService.OnOpen().subscribe();
+
+    const pick$ = zip(this.paymentMethods$, this.preferredPaymentMethod$).pipe(
+      mergeMap(([options, preferred]) => {
+        return this.paymentSelectionService.OnOpen({ options, preferred })
+      })
+    ).subscribe();
+
+    this.subs$ = [...this.subs$, pick$];
+    
+  }
+
+  ngOnDestroy() {
+    if (this.subs$?.length) {
+      this.subs$.forEach(s => s.unsubscribe());
+    }
   }
 
 }
