@@ -1,0 +1,52 @@
+:host {
+  display: flex;
+  flex-direction: column;
+
+  .value {
+    display: flex;
+    align-items: center;
+    .matCommerce-manage-payments-detail{
+        padding:10px;
+    }
+  }
+
+  .cdk-column-action {
+    max-width: 80px;
+  }
+
+  @media(max-width: 959px) {
+
+    .mat-row {
+      flex-direction: column;
+      align-items: start;
+      padding: 8px 24px;
+    }
+
+    mat-cell {
+      min-width: 100%;
+    }
+
+    mat-cell:last-of-type {
+      min-width: 100%;
+      justify-content: flex-end;
+    }
+
+    mat-cell:first-of-type {
+      padding-left: 0px;
+    }
+
+    mat-cell span.value {
+      display: flex;
+      justify-items: flex-start;
+      flex: 100%;
+    }
+
+    mat-row::after {
+      display: none;
+    }
+  }
+
+  .action-item {
+    scale: 0.8;
+  }
+}

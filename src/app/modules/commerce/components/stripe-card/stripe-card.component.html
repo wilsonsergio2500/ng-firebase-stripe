@@ -1,0 +1,44 @@
+
+<form [formGroup]="formGroup" (ngSubmit)="submit()">
+
+  <mat-form-field class="block">
+    <input matInput type="text" placeholder="Name" formControlName="cardHolderName" autocapitalize="off">
+    <mat-error formControlOnErrorItem="cardHolderName"></mat-error>
+  </mat-form-field>
+
+  <mat-card>
+    <ngx-stripe-card [options]="stripeCardOptions" (change)="cardChange($event)"
+                     [elementsOptions]="stripeElementsOptions"></ngx-stripe-card>
+  </mat-card>
+
+
+  <div>
+
+
+    <!--<matxtnd-loading-button mat-raised-button [busy]="busy">
+      <matxtnd-loading-button-ready>
+        Update
+      </matxtnd-loading-button-ready>
+      <matxtnd-loading-button-busy>
+        Updating...
+      </matxtnd-loading-button-busy>
+    </matxtnd-loading-button>-->
+
+
+    <!--<loading-button [IsBusy]="busy" mat-raised-button type="submit" [disabled]="!formValid">
+    <loading-button-ready>
+      Add Card
+    </loading-button-ready>
+    <loading-button-busy>
+      Adding Card...
+    </loading-button-busy>
+  </loading-button>-->
+
+
+
+  </div>
+
+
+
+
+</form>

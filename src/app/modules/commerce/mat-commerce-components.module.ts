@@ -5,13 +5,17 @@ import { MaterialComponentsModule } from '@material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard-icons.module';
 import { getProviders } from './services/elements';
+import { NgxStripeModule } from 'ngx-stripe';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     FlexLayoutModule,
     MaterialComponentsModule,
-    MatCreditcardIconsModule
+    MatCreditcardIconsModule,
+    NgxStripeModule,
+    ReactiveFormsModule
   ],
   declarations: [...getComponents()],
   providers: [
