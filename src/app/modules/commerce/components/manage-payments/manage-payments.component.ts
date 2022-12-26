@@ -17,7 +17,7 @@ export class MatCommerceManagePaymentsComponent {
   modes = MatCommerceManagePaymentViewModeTypes;
   columns = ['label', 'action', 'active'];
 
-  @Input() listHeading: string = 'Method of Payment';
+  @Input() listHeading: string = 'Methods of Payment';
   @Input() cardpaymentMethods: PaymentMethod[] = [];
   @Input() paymentIdBusy: string | null = null;
   @Input() paymentIdSelected: string | null = 'pm_1LTXazHCCV7PTjkI4hAiCS5u';
