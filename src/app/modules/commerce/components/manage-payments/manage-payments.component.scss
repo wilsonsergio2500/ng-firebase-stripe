@@ -5,13 +5,20 @@
   .value {
     display: flex;
     align-items: center;
-    .matCommerce-manage-payments-detail{
-        padding:10px;
+
+    .matCommerce-manage-payments-detail {
+      padding: 10px;
     }
   }
 
   .cdk-column-action {
     max-width: 80px;
+    justify-content: flex-end;
+  }
+
+  .cdk-column-active {
+    max-width: 50px;
+    justify-content: flex-end;
   }
 
   @media(max-width: 959px) {

@@ -18,12 +18,46 @@
     <ng-container matColumnDef="action">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row" data-label="Action">
-        <button mat-mini-fab class="action-item" color="primary">
-          <mat-icon>check</mat-icon>
-        </button>
-        <button class="action-item" mat-mini-fab color="warn" (click)="onRemove(row)">
-          <mat-icon >delete</mat-icon>
-        </button>
+        <ng-container *ngIf="!hasBusyState(row); else busy">
+          <ng-container *ngIf="!hasActiveState(row)">
+            <ng-container [ngSwitch]="mode">
+              <ng-container *ngSwitchCase="modes.Manage">
+                <button mat-mini-fab color="accent" class="action-item" matTooltip="Mark As Default Payment" matTooltipPosition="above" (click)="onDefaulted(row)">
+                  <mat-icon>beenhere</mat-icon>
+                </button>
+                <button class="action-item" mat-mini-fab color="warn" matTooltip="Remove Payment" matTooltipPosition="above" (click)="onRemove(row)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="modes.Selection">
+                <button mat-mini-fab color="primary" class="action-item" matTooltip="Select Payment" matTooltipPosition="above" (click)="onSelect(row)">
+                  <mat-icon>check</mat-icon>
+                </button>
+              </ng-container>
+              </ng-container>
+            </ng-container>
+        </ng-container>
+        <ng-template #busy>
+          <mat-spinner diameter="30"></mat-spinner>
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="active">
+      <mat-header-cell *matHeaderCellDef>Active</mat-header-cell>
+      <mat-cell *matCellDef="let row" data-label="active">
+        <ng-container [ngSwitch]="mode">
+          <ng-container *ngSwitchCase="modes.Manage">
+            <ng-contiainer *ngIf="hasPaymentDefaulted(row)">
+              <mat-icon color="primary" matTooltip="Default" matTooltipPosition="above">beenhere</mat-icon>
+            </ng-contiainer>
+          </ng-container>
+          <ng-container *ngSwitchCase="modes.Selection">
+            <ng-container *ngIf="hasPaymentSelected(row)">
+              <mat-icon color="primary" matTooltip="Selected" matTooltipPosition="above">done</mat-icon>
+            </ng-container>
+          </ng-container>
+        </ng-container>
       </mat-cell>
     </ng-container>
 
