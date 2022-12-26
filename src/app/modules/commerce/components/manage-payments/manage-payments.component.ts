@@ -15,6 +15,7 @@ export class MatCommerceManagePaymentsComponent {
 
   private displayBusyEnabled = true;
   modes = MatCommerceManagePaymentViewModeTypes;
+  columns = ['label', 'action', 'active'];
 
   @Input() listHeading: string = 'Method of Payment';
   @Input() cardpaymentMethods: PaymentMethod[] = [];
@@ -29,8 +30,6 @@ export class MatCommerceManagePaymentsComponent {
   @Output() remove = new EventEmitter<PaymentMethod>();
   @Output() select = new EventEmitter<PaymentMethod>();
   @Output() markedAsDefault = new EventEmitter<PaymentMethod>();
-
-  columns = ['label', 'action', 'active'];
 
   hasBusyState(ele: PaymentMethod) {
     return (this.displayBusyEnabled && !!this.paymentIdBusy && ele.id == this.paymentIdBusy);

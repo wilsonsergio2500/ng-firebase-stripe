@@ -15,6 +15,7 @@ import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard
 import { NgxsFirebaseStateHelperModule } from '@firebaseNgxs/firebase-state-helper.module';
 import { FirebaseModule } from '../firebase/firebase.module';
 import { MatXtndModule } from '@ngjoy/mat-xtnd';
+import { MatCommerceCreditCardIconsModule } from '../credit-card-icons';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { MatXtndModule } from '@ngjoy/mat-xtnd';
     NgxStripeModule,
     MatCommerceComponentsModule,
     MatCreditcardIconsModule,
-    NgxsFirebaseStateHelperModule
+    NgxsFirebaseStateHelperModule,
+    MatCommerceCreditCardIconsModule
   ],
   exports: [
     RouterModule,
@@ -47,7 +49,8 @@ import { MatXtndModule } from '@ngjoy/mat-xtnd';
     CustomComponentsModule,
     NgxStripeModule,
     MatCommerceComponentsModule,
-    MatCreditcardIconsModule
+    MatCreditcardIconsModule,
+    MatCommerceCreditCardIconsModule
   ]
 })
 export class SharedModule {

@@ -7,7 +7,7 @@
       <mat-header-cell *matHeaderCellDef> {{listHeading}} </mat-header-cell>
       <mat-cell *matCellDef="let row" data-label="{{listHeading}}">
         <span class="value">
-          <mat-creditcard-icon [cardType]="row.card.brand"></mat-creditcard-icon>
+          <matCommerce-credit-card-icon [cardType]="row.card.brand"></matCommerce-credit-card-icon>
           <span class="matCommerce-manage-payments-detail">
             **** {{row.card.last4}} | Expires {{row.card.exp_month}} /{{row.card.exp_year}}
           </span>
