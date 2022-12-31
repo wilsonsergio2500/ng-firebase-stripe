@@ -11,7 +11,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CustomComponentsModule } from '@customComponents/customComponents.module';
 import { NgxStripeModule } from 'ngx-stripe'
 import { MatCommerceComponentsModule } from '@materialCommerce/mat-commerce-components.module';
-import { MatCreditcardIconsModule } from '../mat-creditcard-icons/mat-creditcard-icons.module';
 import { NgxsFirebaseStateHelperModule } from '@firebaseNgxs/firebase-state-helper.module';
 import { FirebaseModule } from '../firebase/firebase.module';
 import { MatXtndModule } from '@ngjoy/mat-xtnd';
@@ -34,7 +33,6 @@ import { MatCommerceCreditCardIconsModule } from '../credit-card-icons';
     CustomComponentsModule,
     NgxStripeModule,
     MatCommerceComponentsModule,
-    MatCreditcardIconsModule,
     NgxsFirebaseStateHelperModule,
     MatCommerceCreditCardIconsModule
   ],
@@ -49,7 +47,6 @@ import { MatCommerceCreditCardIconsModule } from '../credit-card-icons';
     CustomComponentsModule,
     NgxStripeModule,
     MatCommerceComponentsModule,
-    MatCreditcardIconsModule,
     MatCommerceCreditCardIconsModule
   ]
 })
