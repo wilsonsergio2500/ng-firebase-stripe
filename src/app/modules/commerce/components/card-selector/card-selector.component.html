@@ -11,7 +11,7 @@
     <mat-list-item *ngFor="let pm of paymentMethods" (click)="onSelect(pm)">
       <div matLine>
         <span class="card-selector-label">
-          <mat-creditcard-icon [cardType]="pm.card.brand"></mat-creditcard-icon>
+          <matCommerce-credit-card-icon [cardType]="pm.card.brand"></matCommerce-credit-card-icon>
           <span class="card-selector-label-detail">
             **** {{pm.card.last4}} | Expires {{pm.card.exp_month}} /{{pm.card.exp_year}}
           </span>
