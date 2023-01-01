@@ -1,3 +1,18 @@
-:host{
+:host {
+  .mat-commerce-stripe-card-name-holder-formfield {
+    display: flex;
 
+    ::ng-deep {
+      .mat-form-field-wrapper {
+        display: flex;
+        flex-grow: 1;
+      }
+    }
+  }
+
+  .mat-commerce-stripe-card-actions{
+      display:flex;
+      justify-content:flex-end;
+      padding:10px;
+  }
 }

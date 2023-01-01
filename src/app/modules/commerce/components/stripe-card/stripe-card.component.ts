@@ -17,6 +17,7 @@ export class MatCommerceStripeCardComponent {
   private hasValidStripeCard = false;
   private hasBusyState = false;
 
+  @Input() cardHolderNamePlaceholder = 'Card Holder Name';
   @Input() stripeCardOptions: StripeCardElementOptions = defaultStripeCardOptions;
   @Input() stripeElementsOptions: StripeElementsOptions = defaultStripeElementOptions;
   @Input() set busy(value: BooleanInput) {

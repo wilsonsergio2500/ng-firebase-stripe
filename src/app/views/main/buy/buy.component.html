@@ -1,7 +1,11 @@
 <div class="content">
 
   <div class="centered">
+
     <mat-card class="product-card">
+
+      <matCommerce-stripe-card></matCommerce-stripe-card>
+
 
       <form [formGroup]="formGroup" (ngSubmit)="submit()">
 
@@ -14,7 +18,7 @@
           <ngx-stripe-card [options]="cardOptions" (change)="onStripeCardChange($event)"
                            [elementsOptions]="elementsOptions"></ngx-stripe-card>
         </mat-card>
-        
+
 
 
         <loading-button [IsBusy]="addingCard$ | async" mat-raised-button type="submit" [disabled]="!hasFormValid">
@@ -65,7 +69,7 @@
       <button mat-button (click)="pickPrefferedPayment()">Pick Payment</button>
 
     </mat-card>
-  </div>
+</div>
 
 
 </div>

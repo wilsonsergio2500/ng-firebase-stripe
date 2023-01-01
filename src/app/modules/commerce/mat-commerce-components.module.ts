@@ -7,6 +7,7 @@ import { getProviders } from './services/elements';
 import { NgxStripeModule } from 'ngx-stripe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCommerceCreditCardIconsModule } from '../credit-card-icons';
+import { MatXtndModule } from '@ngjoy/mat-xtnd';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { MatCommerceCreditCardIconsModule } from '../credit-card-icons';
     MaterialComponentsModule,
     MatCommerceCreditCardIconsModule,
     NgxStripeModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatXtndModule
   ],
   declarations: [...getComponents()],
   providers: [

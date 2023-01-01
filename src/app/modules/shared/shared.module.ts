@@ -13,8 +13,8 @@ import { NgxStripeModule } from 'ngx-stripe'
 import { MatCommerceComponentsModule } from '@materialCommerce/mat-commerce-components.module';
 import { NgxsFirebaseStateHelperModule } from '@firebaseNgxs/firebase-state-helper.module';
 import { FirebaseModule } from '../firebase/firebase.module';
-import { MatXtndModule } from '@ngjoy/mat-xtnd';
 import { MatCommerceCreditCardIconsModule } from '../credit-card-icons';
+import { MatXtndModule } from '@ngjoy/mat-xtnd';
 
 @NgModule({
   imports: [
@@ -47,7 +47,8 @@ import { MatCommerceCreditCardIconsModule } from '../credit-card-icons';
     CustomComponentsModule,
     NgxStripeModule,
     MatCommerceComponentsModule,
-    MatCommerceCreditCardIconsModule
+    MatCommerceCreditCardIconsModule,
+    MatXtndModule
   ]
 })
 export class SharedModule {

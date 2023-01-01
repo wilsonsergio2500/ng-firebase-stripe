@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Store, State, Selector, StateContext, Action } from '@ngxs/store';
+import { Store, State, Selector, StateContext, Action, Select } from '@ngxs/store';
 import { ICustomerStateModel } from './customer.model';
 import { CustomerSetAsLoadingAction, CustomerSetAsDoneAction, CustomerIntializeAction, CustomerSetPreferredPayment, CustomerInitializePreferredPayment } from './customer.actions';
 import { tap, mergeMap } from 'rxjs/operators';
@@ -40,6 +40,12 @@ export class CustomerState {
     return state.preferredPaymentMethod;
   }
 
+  @Select()
+  static getPreferredPaymentMethodId(state: ICustomerStateModel): string {
+    const preferredMethod = state.preferredPaymentMethod
+    return preferredMethod?.id
+  }
+
   @Action(CustomerSetAsDoneAction)
   onDone(ctx: StateContext<ICustomerStateModel>) {
     ctx.patchState({
@@ -74,6 +80,7 @@ export class CustomerState {
   onIntilizePrefferedPaymentMethod(ctx: StateContext<ICustomerStateModel>) {
     const { currentStripeCustomer } = ctx.getState();
     if (currentStripeCustomer.preferred_payment) {
+      console.log(currentStripeCustomer.preferred_payment);
       ctx.patchState({ preferredPaymentMethod: currentStripeCustomer.preferred_payment })
     }
 
