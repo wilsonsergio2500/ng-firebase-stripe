@@ -16,6 +16,7 @@ export class MatCommerceStripeCardComponent {
 
   private hasValidStripeCard = false;
   private hasBusyState = false;
+  private hasAddCardDisplay = true;
 
   @Input() cardHolderNamePlaceholder = 'Card Holder Name';
   @Input() stripeCardOptions: StripeCardElementOptions = defaultStripeCardOptions;
@@ -25,6 +26,12 @@ export class MatCommerceStripeCardComponent {
   }
   get busy() {
     return this.hasBusyState;
+  }
+  @Input() set displayAddCard(value: BooleanInput) {
+    this.hasAddCardDisplay = coerceBooleanProperty(value);
+  }
+  get displayAddCard() {
+    return this.hasAddCardDisplay
   }
   @Output() applyCard = new EventEmitter<IMatCommenrceApplyCardChange>();
   @ViewChild(StripeCardComponent) card: StripeCardComponent;

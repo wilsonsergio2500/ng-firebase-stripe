@@ -11,43 +11,18 @@
                      [elementsOptions]="stripeElementsOptions"></ngx-stripe-card>
   </mat-card>
 
-  <div class="mat-commerce-stripe-card-actions">
-    <matxtnd-loading-button mat-raised-button [busy]="busy">
-      <matxtnd-loading-button-ready>
-        Add
-      </matxtnd-loading-button-ready>
-      <matxtnd-loading-button-busy>
-        Adding...
-      </matxtnd-loading-button-busy>
-    </matxtnd-loading-button>
-  </div>
-
-  <div>
-
-
-    <!--<matxtnd-loading-button mat-raised-button [busy]="busy">
-      <matxtnd-loading-button-ready>
-        Update
-      </matxtnd-loading-button-ready>
-      <matxtnd-loading-button-busy>
-        Updating...
-      </matxtnd-loading-button-busy>
-    </matxtnd-loading-button>-->
-
-
-    <!--<loading-button [IsBusy]="busy" mat-raised-button type="submit" [disabled]="!formValid">
-      <loading-button-ready>
-        Add Card
-      </loading-button-ready>
-      <loading-button-busy>
-        Adding Card...
-      </loading-button-busy>
-    </loading-button>-->
-
-
-
-  </div>
-
+  <ng-container *ngIf="displayAddCard">
+    <div class="mat-commerce-stripe-card-actions">
+      <matxtnd-loading-button mat-raised-button [busy]="busy" [disabled]="!formValid" (submit)="submit()">
+        <matxtnd-loading-button-ready>
+          Add
+        </matxtnd-loading-button-ready>
+        <matxtnd-loading-button-busy>
+          Adding...
+        </matxtnd-loading-button-busy>
+      </matxtnd-loading-button>
+    </div>
+  </ng-container>
 
 
 
